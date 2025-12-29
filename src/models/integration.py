@@ -11,10 +11,34 @@ class PAStatus(str, Enum):
     DENIED = "denied"
     RFI = "rfi"  # Request for Information
 
+class PHICategory(str, Enum):
+    """Categories of Protected Health Information."""
+    IDENTIFIERS = "identifiers"      # Name, DOB, address, phone, email
+    CLINICAL = "clinical"            # Diagnoses, problem list
+    TREATMENT = "treatment"          # Medications, clinical notes
+    ENCOUNTERS = "encounters"        # Visit history, providers seen
+    COVERAGE = "coverage"            # Insurance info, benefits
+
+class AccessPurpose(str, Enum):
+    """Purpose for accessing patient data"""
+    PA_SUBMISSION = "pa_submission"
+    ELIGIBILITY_CHECK = "eligibility_check"
+    CLINICAL_REVIEW = "clinical_review"
+    DOCUMENT_COLLECTION = "document_collection"
+
+class PatientDataRequest(BaseModel):
+    """Request for patient data with required access controls."""
+    patient_id: str = Field(..., description="Unique patient identifier")
+    categories: List[PHICategory] = Field(..., description="Categories of data requested")
+    purpose: AccessPurpose = Field(..., description="Purpose of data access")
+    requester_id: str = Field(..., description="requester id")
+    justification: str = Field(..., min_length=10, description="Why this data is needed")
+
 class PatientSummary(BaseModel):
     """Patient summary information from medical records."""
     patient_id: str = Field(..., description="Unique patient identifier")
     demographics: Dict[str, Any] = Field(..., description="Patient demographic information")
+    coverage: Dict[str, str] = Field(..., description="Patient coverage information")
     active_problems: List[str] = Field(default_factory=list, description="Current active medical problems")
     medications: List[Dict[str, Any]] = Field(default_factory=list, description="Current medications")
     recent_visits: List[Dict[str, Any]] = Field(default_factory=list, description="Recent medical visits")
@@ -64,16 +88,12 @@ class PAStatusResponse(BaseModel):
     decision_details: Optional[Dict[str, Any]] = Field(None, description="Details of approval/denial/RFI")
     authorization_number: Optional[str] = Field(None, description="Authorization number if approved")
     denial_reason: Optional[str] = Field(None, description="Reason for denial")
-    rfi_details: Optional[Dict[str, Any]] = Field(None, description="Details of information requested")
+    rfi_details: List[str] = Field(None, description="Details of information requested")
 
 
-class DocumentInfo(BaseModel):
+class UploadDocument(BaseModel):
     """Information about documents for upload."""
     document_id: str = Field(..., description="Unique document identifier")
-    document_type: str = Field(..., description="Type of document")
-    file_path: str = Field(..., description="Path to the document file")
-    description: str = Field(..., description="Description of the document content")
-    upload_date: datetime = Field(default_factory=datetime.utcnow, description="When document was uploaded")
 
 
 class UploadResult(BaseModel):

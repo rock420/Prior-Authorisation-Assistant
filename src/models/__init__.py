@@ -12,14 +12,17 @@ from .core import (
     Appeal,
 )
 
-from .tools import (
+from .integration import (
     PAStatus,
+    PHICategory,
+    AccessPurpose,
+    PatientDataRequest,
     PatientSummary,
     CoverageInfo,
     PARequirement,
     SubmissionResult,
     PAStatusResponse,
-    DocumentInfo,
+    UploadDocument,
     UploadResult,
 )
 
@@ -45,14 +48,17 @@ __all__ = [
     "AuditEntry",
     "PARequest",
     "Appeal",
-    # Tool models
+    # Integration models
     "PAStatus",
+    "PHICategory",
+    "AccessPurpose",
+    "PatientDataRequest",
     "PatientSummary",
     "CoverageInfo",
     "PARequirement",
     "SubmissionResult",
     "PAStatusResponse",
-    "DocumentInfo",
+    "UploadDocument",
     "UploadResult",
     # HITL models
     "TaskType",

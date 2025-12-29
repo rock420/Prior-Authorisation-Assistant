@@ -1,0 +1,78 @@
+{
+    "BCBS001": {
+        "payer_id": "BCBS001",
+        "payer_name": "Blue Cross Blue Shield",
+        "plans": {
+            "PLAN001": {
+                "plan_id": "PLAN001",
+                "plan_name": "Standard PPO",
+                "plan_type": "PPO",
+                "members": {
+                    "PAT001": {
+                        "member_id": "MEM123456789",
+                        "effective_date": "2024-01-01",
+                        "termination_date": null,
+                        "eligibility_status": "active",
+                        "coverage_type": "individual",
+                        "copay": {
+                            "primary_care": 25,
+                            "specialist": 50,
+                            "emergency": 150
+                        },
+                        "deductible": {
+                            "individual": 1500,
+                            "family": 3000,
+                            "met_amount": 850
+                        },
+                        "out_of_pocket_max": {
+                            "individual": 6000,
+                            "family": 12000,
+                            "met_amount": 2100
+                        }
+                    }
+                }
+            },
+            "PLAN002": {
+                "plan_id": "PLAN002",
+                "plan_name": "Premium HMO",
+                "plan_type": "HMO",
+                "members": {
+                    "PAT002": {
+                        "member_id": "MEM987654321",
+                        "effective_date": "2023-06-01",
+                        "termination_date": null,
+                        "eligibility_status": "active",
+                        "coverage_type": "family",
+                        "copay": {
+                            "primary_care": 15,
+                            "specialist": 30,
+                            "emergency": 100
+                        },
+                        "deductible": {
+                            "individual": 500,
+                            "family": 1000,
+                            "met_amount": 500
+                        },
+                        "out_of_pocket_max": {
+                            "individual": 3000,
+                            "family": 6000,
+                            "met_amount": 1200
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "AETNA001": {
+        "payer_id": "AETNA001",
+        "payer_name": "Aetna",
+        "plans": {
+            "PLAN003": {
+                "plan_id": "PLAN003",
+                "plan_name": "Choice POS II",
+                "plan_type": "POS",
+                "members": {}
+            }
+        }
+    }
+}

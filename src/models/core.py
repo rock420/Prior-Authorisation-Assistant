@@ -6,6 +6,7 @@ from pydantic import BaseModel, Field, field_validator, model_validator, ConfigD
 from enum import Enum
 
 from .validation import ValidationUtils
+from .document import DocumentMetadata
 
 
 class UrgencyLevel(str, Enum):
@@ -25,7 +26,6 @@ class PAWorkFlowStatus(str, Enum):
     TRACKING = "tracking"
     RESOLUTION = "resolution"
     APPEAL = "appeal"
-
 
 class ServiceInfo(BaseModel):
     """Information about the medical service requiring authorization."""
@@ -73,25 +73,25 @@ class ClinicalContext(BaseModel):
     """Clinical information supporting the PA request."""
     model_config = ConfigDict(use_enum_values=True, validate_assignment=True)
     
-    primary_diagnosis: str = Field(..., description="ICD-10 code for Primary diagnosis for the service")
+    primary_diagnosis: str = Field(..., description="Primary diagnosis for the service")
     supporting_diagnoses: List[str] = Field(default_factory=list, description="Additional relevant diagnoses")
     relevant_history: List[str] = Field(default_factory=list, description="Relevant medical history")
     prior_treatments: List[Dict[str, Any]] = Field(default_factory=list, description="Previous treatments attempted")
     clinical_notes: List[str] = Field(default_factory=list, description="Clinical notes supporting the request")
-    supporting_documents: List[str] = Field(default_factory=list, description="References to supporting documentation")
+    supporting_documents: List[DocumentMetadata] = Field(default_factory=list, description="References to supporting documentation")
 
-    @field_validator('primary_diagnosis')
-    @classmethod
-    def validate_primary_diagnosis(cls, v):
-        """Validate primary diagnosis is not empty and has correct ICD-10 format."""
-        if not v or not v.strip():
-            raise ValueError("Primary diagnosis cannot be empty")
+    # @field_validator('primary_diagnosis')
+    # @classmethod
+    # def validate_primary_diagnosis(cls, v):
+    #     """Validate primary diagnosis is not empty and has correct ICD-10 format."""
+    #     if not v or not v.strip():
+    #         raise ValueError("Primary diagnosis cannot be empty")
         
-        cleaned = v.strip().upper()
-        if not ValidationUtils.validate_icd10_code(cleaned):
-            raise ValueError(f"Invalid ICD-10 code format: {cleaned}")
+    #     cleaned = v.strip().upper()
+    #     if not ValidationUtils.validate_icd10_code(cleaned):
+    #         raise ValueError(f"Invalid ICD-10 code format: {cleaned}")
         
-        return cleaned
+    #     return cleaned
 
 
 class PayerInfo(BaseModel):
@@ -131,19 +131,27 @@ class ProviderInfo(BaseModel):
     @classmethod
     def validate_npi(cls, v):
         """Validate NPI format (10 digits)."""
-        return ValidationUtils.validate_npi(v)
+        if not ValidationUtils.validate_npi(v):
+            raise ValueError(f"NPI must be exactly 10 digits, got: {v}")
+        return v
     
     @field_validator('phone')
     @classmethod
     def validate_phone(cls, v):
         """Validate phone number format."""
-        return ValidationUtils.validate_phone(v)
+        sanitized = ValidationUtils.sanitize_phone(v)
+        if not ValidationUtils.validate_phone(v):
+            raise ValueError(f"Phone number must contain exactly 10 digits, got: {v}")
+        return sanitized
     
     @field_validator('address')
     @classmethod
     def validate_address(cls, v):
         """Validate required address fields."""
-        return ValidationUtils.validate_address_completeness(v)
+        missing_fields = ValidationUtils.validate_address_completeness(v)
+        if missing_fields:
+            raise ValueError(f"Address missing required fields: {missing_fields}")
+        return v
 
 
 class AuditEntry(BaseModel):
@@ -177,7 +185,6 @@ class PARequest(BaseModel):
     service_details: ServiceInfo = Field(..., description="Details of the service requiring authorization")
     clinical_context: ClinicalContext = Field(..., description="Clinical information supporting the request")
     payer_info: PayerInfo = Field(..., description="Patient's insurance information")
-    status: PAWorkFlowStatus = Field(default=PAWorkFlowStatus.INTAKE, description="Current workflow status")
     audit_trail: List[AuditEntry] = Field(default_factory=list, description="Complete audit trail")
     created_at: datetime = Field(default_factory=datetime.utcnow, description="When the request was created")
     updated_at: datetime = Field(default_factory=datetime.utcnow, description="When the request was last updated")

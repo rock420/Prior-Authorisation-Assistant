@@ -9,12 +9,14 @@ from enum import Enum
 class TaskType(str, Enum):
     """Types of HITL tasks."""
     CLINICAL_REVIEW = "clinical_review"
+    REQUIRE_DOCUMENTS = "require_documents"
     DOCUMENTATION_REVIEW = "documentation_review"
     APPEAL_APPROVAL = "appeal_approval"
     AMBIGUOUS_RESPONSE = "ambiguous_response"
     URGENT_REQUEST = "urgent_request"
     COMPLIANCE_REVIEW = "compliance_review"
     TECHNICAL_ESCALATION = "technical_escalation"
+    MISSING_DATA = "missing_data"
 
 
 class TaskPriority(str, Enum):

@@ -1,0 +1,17 @@
+{
+    "provider_id": "PROV001",
+    "npi": "5566778899",
+    "name": "Dr. Emily Davis",
+    "organization": "Northwest Primary Care",
+    "phone": "2065554000",
+    "email": "edavis@nwprimarycare.com",
+    "address": {
+        "street": "100 Family Medicine Lane",
+        "city": "Seattle",
+        "state": "WA",
+        "zip_code": "98103"
+    },
+    "license_number": "MD44556",
+    "specialty": "Family Medicine",
+    "taxonomy_code": "207Q00000X"
+}
