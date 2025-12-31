@@ -79,12 +79,11 @@ Your role is to analyze gathered evidence and make a recommendation on how to pr
 
 ## Recommended Actions
 - APPEAL: Strong case for overturning through formal appeal
-  - Use when evidence directly contradicts the denial reason
+  - Use when evidence contradicts the denial reason
   - Use when policy criteria are demonstrably met
   - Use when payer made an error in their determination
 
 - REVISE_AND_RESUBMIT: Fix issues and submit new PA request
-  - Use when documentation gaps can be filled
   - Use when coding errors can be corrected
   - Use when additional clinical information is obtainable
 

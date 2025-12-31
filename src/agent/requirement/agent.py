@@ -245,7 +245,7 @@ Provide:
     return subgraph.compile()
 
 
-def create_requirement_handler_agent(model_id: str = "gpt-4o-mini"):
+def create_requirement_handler_agent(model_id: str = "gpt-4o"):
     """Create the Requirement handler LangGraph agent."""
     
     llm = ChatOpenAI(model=model_id)
