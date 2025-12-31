@@ -162,7 +162,7 @@
         "DOC-PAT005-002": {
             "document_id": "DOC-PAT005-002",
             "patient_id": "PAT005",
-            "title": "Spine Consultation Note",
+            "title": "Spine Consultation Note - Radicular Symptoms Documentation",
             "document_type": "clinical_note",
             "document_path": "/documents/PAT005/clinical_notes/spine_20240815.pdf",
             "created_at": "2024-08-15T16:00:00Z",
@@ -175,10 +175,14 @@
                 "medical necessity",
                 "conservative treatment",
                 "physical examination",
-                "neurological exam"
+                "neurological exam",
+                "radicular symptoms",
+                "radiculopathy",
+                "leg pain",
+                "nerve root compression"
             ],
-            "summary": "Orthopedic spine consultation documenting failed conservative treatment and recommending epidural steroid injection. Full neurological examination documented.",
-            "content": "ORTHOPEDIC SPINE CONSULTATION\n\nPatient: Michael Anderson\nDate: 08/15/2024\n\nREFERRAL REASON: Low back pain with left leg radiculopathy\n\nHPI: 54 y/o male with 2 months of low back pain and left leg pain. Failed conservative treatment with PT and medications. MRI today shows L4-L5 disc herniation.\n\nCONSERVATIVE TREATMENT HISTORY:\n- Physical therapy: 8 sessions over 6 weeks (06/15/2024 - 07/30/2024)\n- NSAIDs: Meloxicam 15mg daily x 10 weeks\n- Activity modification and home exercises\n\nMRI REVIEW: L4-L5 left paracentral disc herniation with L5 nerve root compression, correlates with clinical presentation.\n\nPHYSICAL EXAM:\n- Antalgic gait\n- Positive left SLR at 40 degrees\n- Left L5 dermatomal numbness\n- Left EHL 4+/5\n\nASSESSMENT: L4-L5 disc herniation with left L5 radiculopathy\n\nPLAN:\n1. Recommend left L4-L5 transforaminal epidural steroid injection\n2. Continue gabapentin\n3. Activity modification\n4. Re-evaluate in 6 weeks\n5. If no improvement, consider surgical consultation"
+            "summary": "Orthopedic spine consultation documenting radicular symptoms including left leg pain, numbness, and weakness. Full neurological examination with positive findings. Failed conservative treatment documented. Recommending epidural steroid injection.",
+            "content": "ORTHOPEDIC SPINE CONSULTATION\n\nPatient: Michael Anderson\nDate: 08/15/2024\n\nREFERRAL REASON: Low back pain with left leg radiculopathy\n\nHPI: 54 y/o male with 2 months of low back pain and left leg pain. Failed conservative treatment with PT and medications. MRI today shows L4-L5 disc herniation.\n\nRADICULAR SYMPTOMS DOCUMENTED:\n- Left leg pain radiating from buttock to calf, following L5 dermatomal distribution\n- Numbness and tingling in left lateral leg and dorsum of foot\n- Pain rated 7/10, worse with sitting and forward flexion\n- Symptoms consistent with L5 radiculopathy\n\nCONSERVATIVE TREATMENT HISTORY:\n- Physical therapy: 8 sessions over 6 weeks (06/15/2024 - 07/30/2024)\n- NSAIDs: Meloxicam 15mg daily x 10 weeks\n- Activity modification and home exercises\n\nMRI REVIEW: L4-L5 left paracentral disc herniation with L5 nerve root compression, correlates with clinical presentation.\n\nPHYSICAL EXAM:\n- Antalgic gait\n- Positive left SLR at 40 degrees reproducing radicular leg pain\n- Left L5 dermatomal numbness on sensory testing\n- Left EHL 4+/5 (weakness)\n- Left ankle reflex diminished\n\nASSESSMENT: L4-L5 disc herniation with left L5 radiculopathy. Radicular symptoms confirmed on examination.\n\nPLAN:\n1. Recommend left L4-L5 transforaminal epidural steroid injection\n2. Continue gabapentin for radicular pain\n3. Activity modification\n4. Re-evaluate in 6 weeks\n5. If no improvement, consider surgical consultation"
         },
         "DOC-PAT005-003": {
             "document_id": "DOC-PAT005-003",
@@ -201,7 +205,6 @@
             "summary": "Follow-up after epidural injection documenting clinical change - initial 60% improvement followed by symptom recurrence. Medical necessity for repeat imaging established.",
             "content": "PAIN MANAGEMENT FOLLOW-UP\n\nPatient: Michael Anderson\nDate: 10/20/2024\n\nPROCEDURE HISTORY: Left L4-L5 transforaminal epidural steroid injection on 09/15/2024\n\nSUBJECTIVE:\nPatient reports initial 60% improvement in leg pain for approximately 4 weeks following injection. Over the past 2 weeks, symptoms have gradually returned:\n- Left leg pain now 6/10 (was 3/10 at best)\n- Numbness in left foot persists\n- Back pain 5/10\n- Difficulty with prolonged standing and walking\n\nOBJECTIVE:\n- Gait: Mildly antalgic\n- SLR: Positive left at 50 degrees (improved from 40)\n- Strength: Left EHL 4/5\n- Sensation: Decreased left L5 dermatome\n\nASSESSMENT:\nL4-L5 disc herniation with recurrent left L5 radiculopathy. Partial response to epidural injection with symptom recurrence.\n\nMEDICAL NECESSITY FOR REPEAT MRI:\nClinical change documented - patient had significant initial response to epidural injection (60% improvement) followed by symptom recurrence. This clinical trajectory suggests possible interval change in disc pathology. Repeat MRI is medically necessary to:\n1. Evaluate for disc re-herniation or progression\n2. Assess for new pathology explaining symptom recurrence\n3. Guide surgical decision-making\n\nPLAN:\n1. Options discussed:\n   a. Repeat epidural injection\n   b. Repeat MRI to evaluate for interval change\n   c. Surgical consultation\n2. Patient prefers repeat MRI before deciding on next steps\n3. Requesting PA for repeat MRI lumbar spine\n4. Continue current medications\n5. Follow-up after imaging"
         },
-
         "DOC-PAT005-005": {
             "document_id": "DOC-PAT005-005",
             "patient_id": "PAT005",

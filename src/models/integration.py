@@ -96,6 +96,7 @@ class PAStatusResponse(BaseModel):
 class UploadDocument(BaseModel):
     """Information about documents for upload."""
     document_id: str = Field(..., description="Unique document identifier")
+    title: str = Field(..., description="Document title")
 
 
 class UploadResult(BaseModel):

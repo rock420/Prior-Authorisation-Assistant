@@ -1,5 +1,6 @@
 """LangGraph state schema and management for PA Healthcare Agent."""
 
+import operator
 from typing import List, Optional, Dict, Any, Annotated, TypedDict
 from datetime import datetime
 from pydantic import BaseModel, Field
@@ -16,6 +17,7 @@ from ..models import (
     ClinicalContext,
     AuditEntry,
     PAStatusResponse,
+    UploadDocument
 )
 from ..models.document import DocumentMapping, DocumentMetadata
 from ..models.hitl import HITLTask
@@ -67,6 +69,7 @@ class PAAgentState(MessagesState):
 
     #PA submission
     submission_id: str
+    uploaded_documents: Annotated[List[UploadDocument], operator.add]
     submission_timestamp: datetime
     status: PAStatusResponse
 

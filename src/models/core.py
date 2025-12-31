@@ -104,6 +104,7 @@ class PayerInfo(BaseModel):
     model_config = ConfigDict(use_enum_values=True, validate_assignment=True)
     
     payer_id: str = Field(..., description="Unique identifier for the payer")
+    payer_name: str = Field(..., description="Name of the payer")
     plan_id: str = Field(..., description="Specific plan identifier")
     plan_name: str = Field(..., description="Plan name")
     member_id: str = Field(..., description="Patient's member ID")
@@ -225,7 +226,7 @@ class Appeal(BaseModel):
     supporting_evidence: List[str] = Field(default_factory=list, description="Supporting evidence and documentation")
     medical_literature: List[Dict[str, str]] = Field(default_factory=list, description="Relevant medical literature")
     
-    draft_letter: str = Field(..., description="Draft appeal letter content")
+    draft_id: str = Field(..., description="Draft appeal letter id")
     required_approvals: List[str] = Field(..., description="Staff roles required to approve appeal")
     approvals_received: List[Dict[str, Any]] = Field(default_factory=list, description="Approvals received")
     

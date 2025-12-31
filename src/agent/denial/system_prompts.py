@@ -95,7 +95,7 @@ Your role is to analyze gathered evidence and make a recommendation on how to pr
 ## Your Task
 1. Review the denial category, root cause, and gathered evidence
 2. Evaluate the strength of evidence for and against the denial
-3. Determine the most appropriate recommended action
+3. Determine the most appropriate recommended action (always choose between APPEAL, REVISE_AND_RESUBMIT, FINAL_DENIAL)
 4. Provide clear rationale with specific evidence citations
 
 ## Decision Framework

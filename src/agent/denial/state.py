@@ -7,7 +7,7 @@ from pydantic import BaseModel, Field
 from langgraph.graph import MessagesState
 from enum import Enum
 
-from ...models.core import ServiceInfo, ClinicalContext
+from ...models import ServiceInfo, ClinicalContext, UploadDocument
 
 class DenialCategory(str, Enum):
     """Categories of PA denial reasons."""
@@ -81,6 +81,7 @@ class DenialEvaluatorState(MessagesState):
     denial_details: DenialDetails
     service_details: ServiceInfo
     clinical_context: ClinicalContext
+    documents_shared: List[UploadDocument]
 
     # Categorization output
     category: DenialCategory

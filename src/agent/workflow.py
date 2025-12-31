@@ -27,6 +27,9 @@ from langgraph.checkpoint.memory import MemorySaver
 from langchain_core.messages import SystemMessage, HumanMessage
 
 from uuid import uuid4
+from pathlib import Path
+
+appeal_draft_dir = Path(__file__).resolve().parent.parent.parent / "data/appeal"
 
 model = ChatOpenAI(model="gpt-4o-mini", timeout=20, max_retries=3)
 _memory: Optional[MemorySaver] = None
@@ -93,6 +96,7 @@ async def determine_coverage(state: PAAgentState) -> PAAgentState:
         return {
             "payer_info" : PayerInfo(
                 payer_id=coverage.plan_details.get("payer_id"),
+                payer_name=coverage.plan_details.get("payer_name"),
                 plan_id=coverage.plan_details.get("plan_id"),
                 member_id=coverage.plan_details.get("member_id"),
                 plan_name=coverage.plan_details.get("plan_name"),
@@ -249,7 +253,6 @@ async def tracking_node(state: PAAgentState) -> PAAgentState:
         track_submission(pa_request_id, pa_submission_id)
         NodeInterrupt("PA status is still in pending")
     
-    log_status(f"Decision received: {status.status.value.upper()}")
     #Todo: save the status in PA_Status table
 
     return { "status": status}
@@ -272,7 +275,8 @@ async def denial_node(state: PAAgentState) -> PAAgentState:
         payer_id=payer_info.payer_id,
         plan_id=payer_info.plan_id,
         service_details=state.get("service_info"),
-        clinical_context=state.get("clinical_context")
+        clinical_context=state.get("clinical_context"),
+        documents_shared=state.get("uploaded_documents")
     )
 
     if result.confidence_score<0.7:
@@ -355,10 +359,14 @@ async def appeal_node(state: PAAgentState) -> PAAgentState:
         provider_npi=provider_info.npi,
         provider_phone=provider_info.phone,
         provider_address=provider_address_str,
-        payer_name=payer_info.plan_name,
+        payer_name=payer_info.payer_name,
         payer_address="",  # Could be fetched from payer service
         content=appeal_content,
     )
+
+    appeal_id = "APPEAL-"+str(uuid4())
+    with open(appeal_draft_dir / f"{appeal_id}.txt", "x") as f:
+        f.write(draft_letter)
     
     # Create Appeal object
     appeal = Appeal(
@@ -374,7 +382,7 @@ async def appeal_node(state: PAAgentState) -> PAAgentState:
         clinical_justification=appeal_content.clinical_justification,
         supporting_evidence=[e.fact for e in denial_evaluation.evidences],
         medical_literature=[],
-        draft_letter=draft_letter,
+        draft_id=appeal_id,
         required_approvals=["clinician", "medical_director"],
         approvals_received=[]
     )
@@ -482,7 +490,7 @@ async def upload_require_documents(state:PAAgentState):
     documents: List[UploadDocument] = []
     for item in requirement_result:
         #update the database with the new documents
-        documents += [UploadDocument(document_id=doc.document_id) for doc in item.documents]
+        documents += [UploadDocument(document_id=doc.document_id, title=doc.title) for doc in item.documents]
         if item.information:
             #if there is information, create a pdf out of it and upload the information
             pass
@@ -490,7 +498,7 @@ async def upload_require_documents(state:PAAgentState):
     upload_documents(submission_id=pa_submission_id, documents=documents)
 
     log_status(f"Uploaded {len(documents)} document(s).")
-    return {"requirement_result":[], "require_items":[], "workflow_status": PAWorkFlowStatus.UPLOAD_REQUIREMENTS}
+    return {"requirement_result":[], "require_items":[], "uploaded_documents": documents,"workflow_status": PAWorkFlowStatus.UPLOAD_REQUIREMENTS}
 
 async def human_intervention(state: PAAgentState) -> PAAgentState:
     if state.get("awaiting_clinician_input"):

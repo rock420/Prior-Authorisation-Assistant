@@ -256,13 +256,13 @@
             "date_of_birth": "1982-11-28",
             "gender": "Female",
             "address": {
-                "street": "321 Cedar Lane",
-                "city": "Bellevue",
+                "street": "892 Willow Court",
+                "city": "Kirkland",
                 "state": "WA",
-                "zip": "98004"
+                "zip": "98033"
             },
-            "phone": "4255553456",
-            "email": "jennifer.martinez@email.com"
+            "phone": "4255558901",
+            "email": "jennifer.m@email.com"
         },
         "coverage": {
             "payer_id": "BCBS001",
@@ -274,70 +274,44 @@
             {
                 "code": "M05.79",
                 "description": "Rheumatoid arthritis with rheumatoid factor, multiple sites",
-                "onset_date": "2022-03-15",
+                "onset_date": "2025-05-01",
                 "status": "active"
             },
             {
                 "code": "M06.09",
                 "description": "Rheumatoid arthritis without rheumatoid factor, multiple sites",
-                "onset_date": "2022-03-15",
+                "onset_date": "2025-05-01",
                 "status": "active"
             }
         ],
         "medications": [
             {
-                "name": "Methotrexate",
-                "dose": "15mg",
-                "frequency": "once weekly",
-                "start_date": "2022-04-01",
-                "status": "active"
-            },
-            {
-                "name": "Folic Acid",
-                "dose": "1mg",
-                "frequency": "once daily",
-                "start_date": "2022-04-01",
-                "status": "active"
-            },
-            {
                 "name": "Prednisone",
-                "dose": "5mg",
+                "dose": "10mg",
                 "frequency": "once daily",
-                "start_date": "2024-08-01",
+                "start_date": "2025-05-15",
+                "status": "active"
+            },
+            {
+                "name": "Naproxen",
+                "dose": "500mg",
+                "frequency": "twice daily",
+                "start_date": "2025-05-01",
                 "status": "active"
             }
         ],
         "recent_visits": [
             {
-                "date": "2024-08-15",
+                "date": "2025-05-01",
                 "type": "Rheumatology",
                 "provider": "Dr. Amanda Chen",
-                "summary": "Patient with RA on methotrexate x 2 years. Disease activity remains moderate despite dose optimization. DAS28 score 4.2. Discussed biologic therapy options. Patient interested in adalimumab (Humira). Will submit PA request."
+                "summary": "New patient with joint pain and swelling x 3 months. Labs: RF positive 85 IU/mL, Anti-CCP >250 U/mL, CRP 2.8, ESR 42. Diagnosed with seropositive RA. Started on prednisone bridge therapy. Discussed treatment options."
             },
             {
-                "date": "2024-10-01",
+                "date": "2025-12-15",
                 "type": "Rheumatology Follow-up",
                 "provider": "Dr. Amanda Chen",
-                "summary": "Follow-up for RA. Patient continues to have active disease despite methotrexate 15mg weekly for 2+ years. Morning stiffness >1 hour, swollen joint count 6, tender joint count 8. Labs show elevated CRP 2.8, ESR 42. Requesting biologic therapy - adalimumab."
-            }
-        ],
-        "failed_therapies": [
-            {
-                "medication": "Methotrexate",
-                "dose": "15mg weekly",
-                "start_date": "2022-04-01",
-                "duration_months": 30,
-                "reason_for_failure": "Inadequate response - persistent moderate disease activity",
-                "documented_by": "Dr. Amanda Chen"
-            },
-            {
-                "medication": "Hydroxychloroquine",
-                "dose": "200mg BID",
-                "start_date": "2022-04-01",
-                "end_date": "2023-06-01",
-                "duration_months": 14,
-                "reason_for_failure": "Discontinued due to retinal toxicity concerns, inadequate efficacy",
-                "documented_by": "Dr. Amanda Chen"
+                "summary": "Follow-up for RA. High disease activity with DAS28-CRP 5.2. Morning stiffness >1 hour. Bilateral MCP and PIP joint synovitis. Patient requesting Humira (adalimumab) for RA management. Hepatitis B/C screening negative."
             }
         ]
     },

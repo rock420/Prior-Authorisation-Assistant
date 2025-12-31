@@ -112,6 +112,17 @@ def build_reasoning_user_prompt(state: DenialEvaluatorState) -> str:
         denial = state["denial_details"]
         parts.append(f"- Original Reason: {denial.denial_reason}")
 
+    if state.get("cliniclinical_context"):
+        parts.append(f"""## Clinical Context already shared with payer
+- Relevant History: {state["clinical_context"].relevant_history}
+- Prior Treatments: {state["clinical_context"].prior_treatments}
+- Clinical Notes: {state["clinical_context"].clinical_notes}""")
+
+
+    if state.get("documents_shared"):
+        parts.append(f"""## Documents already shared with payer
+{chr(10).join(f"{doc.document_id}- {doc.title}" for doc in state["documents_shared"])}""")
+
     # Evidence found
     if state.get("found_evidence"):
         evidence_items = []

@@ -208,9 +208,7 @@
             "required_documents": [
                 "Clinical notes documenting diagnosis and disease activity",
                 "Documentation of failed first-line DMARD therapy with dates and doses",
-                "Relevant lab results (RF, Anti-CCP, CRP, ESR for RA)",
-                "Hepatitis B and C screening",
-                "Treatment plan and expected duration"
+                "Relevant lab results (RF, Anti-CCP, CRP, ESR for RA)"
             ],
             "medical_necessity_criteria": [
                 "Confirmed diagnosis of approved indication (RA, PsA, AS, Crohn's, UC, Psoriasis)",

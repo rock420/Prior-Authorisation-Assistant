@@ -47,7 +47,7 @@ from ...tools import (
     lookup_policy_criteria,
 )
 
-from ...models.core import ServiceInfo, ClinicalContext
+from ...models import ServiceInfo, ClinicalContext, UploadDocument
 
 
 # Console output helper
@@ -214,6 +214,7 @@ async def evaluate_denial(
     plan_id: str,
     service_details: ServiceInfo,
     clinical_context: ClinicalContext,
+    documents_shared: List[UploadDocument]
 ) -> DenialEvaluationResult:
     """Evaluate a PA denial and recommend next steps."""
     
@@ -226,6 +227,7 @@ async def evaluate_denial(
         "denial_details": denial_details,
         "service_details": service_details,
         "clinical_context": clinical_context,
+        "documents_shared": documents_shared,
         "revision_count": 0
     }
     
@@ -248,9 +250,12 @@ async def evaluate_denial(
             except:
                 continue
 
+    recommendation = result.get("recommendation")
+    if recommendation is None and judgement:
+        recommendation = judgement.recommendation
 
     return DenialEvaluationResult(
-        recommendation=result.get("recommendation"),
+        recommendation=recommendation,
         confidence_score=judgement.confidence_score if judgement else 1.0, #for only categorization case
         root_cause=result.get("root_cause"),
         evidences=evidences,
