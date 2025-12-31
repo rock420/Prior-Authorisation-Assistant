@@ -20,11 +20,16 @@ class PAWorkFlowStatus(str, Enum):
     """Status of PA request workflow."""
     INTAKE = "intake"
     VALIDATION = "validation"
+    COVERAGE_DETERMINATON = "coverage_determination"
     ELIGIBILITY_DETERMINATION = "eligibility_determination"
-    DOCUMENTATION = "documentation"
+    REQUIREMENT_COLLECTION = "requirement_collection"
+    REQUIREMENT_VALIDATION = "requirement_validation"
+    UPLOAD_REQUIREMENTS = "upload_requirements"
     SUBMISSION = "submission"
     TRACKING = "tracking"
+    DENIAL_EVALUATION = "denial_evaluation"
     RESOLUTION = "resolution"
+    REVISE = "revise"
     APPEAL = "appeal"
 
 class ServiceInfo(BaseModel):
