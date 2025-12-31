@@ -12,7 +12,7 @@ class ValidationUtils:
     # Regex patterns for common validations
     NPI_PATTERN = re.compile(r'^\d{10}$')
     EMAIL_PATTERN = re.compile(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
-    CPT_PATTERN = re.compile(r'^\d{5}$')
+    CPT_PATTERN = re.compile(r'^[A-Z]?\d{4,5}$')
     HCPCS_PATTERN = re.compile(r'^[A-Z]\d{4}$')
     ICD10_PATTERN = re.compile(r'^[A-Z]\d{2}(\.[A-Z0-9]{1,4})?$')
     ZIP_CODE_PATTERN = re.compile(r'^\d{5}(-\d{4})?$')

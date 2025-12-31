@@ -339,40 +339,6 @@
                 "reason_for_failure": "Discontinued due to retinal toxicity concerns, inadequate efficacy",
                 "documented_by": "Dr. Amanda Chen"
             }
-        ],
-        "lab_results": [
-            {
-                "test": "Rheumatoid Factor",
-                "value": "156",
-                "unit": "IU/mL",
-                "reference_range": "<14",
-                "date": "2024-10-01",
-                "status": "abnormal"
-            },
-            {
-                "test": "Anti-CCP Antibody",
-                "value": "245",
-                "unit": "U/mL",
-                "reference_range": "<20",
-                "date": "2024-10-01",
-                "status": "abnormal"
-            },
-            {
-                "test": "CRP",
-                "value": "2.8",
-                "unit": "mg/dL",
-                "reference_range": "<0.5",
-                "date": "2024-10-01",
-                "status": "abnormal"
-            },
-            {
-                "test": "ESR",
-                "value": "42",
-                "unit": "mm/hr",
-                "reference_range": "<20",
-                "date": "2024-10-01",
-                "status": "abnormal"
-            }
         ]
     },
     "PAT005": {

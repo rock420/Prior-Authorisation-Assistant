@@ -1,0 +1,234 @@
+{
+    "procedures": {
+        "72148": {
+            "code": "72148",
+            "description": "MRI lumbar spine without contrast",
+            "lcd_reference": "LCD-L35000",
+            "ncd_reference": null,
+            "medical_necessity_criteria": [
+                "Conservative treatment failure for at least 6 weeks",
+                "Documented neurological deficits (weakness, numbness, reflex changes)",
+                "Red flag symptoms (cauda equina, progressive deficit, malignancy)",
+                "Pre-surgical planning when surgery is indicated"
+            ],
+            "required_documentation": [
+                "Clinical notes documenting symptoms duration",
+                "Physical therapy records",
+                "Neurological examination findings",
+                "List of failed conservative treatments with dates"
+            ]
+        },
+        "72149": {
+            "code": "72149",
+            "description": "MRI lumbar spine with contrast",
+            "lcd_reference": "LCD-L35000",
+            "ncd_reference": null,
+            "medical_necessity_criteria": [
+                "Post-operative evaluation",
+                "Suspected infection or inflammation",
+                "Known or suspected neoplasm"
+            ],
+            "required_documentation": [
+                "Clinical notes for contrast indication",
+                "Previous imaging results"
+            ]
+        },
+        "70553": {
+            "code": "70553",
+            "description": "MRI brain with and without contrast",
+            "lcd_reference": "LCD-L35000",
+            "ncd_reference": "NCD-220.2",
+            "medical_necessity_criteria": [
+                "Suspected intracranial pathology",
+                "Evaluation of known brain tumor",
+                "Assessment of demyelinating disease"
+            ],
+            "required_documentation": [
+                "Clinical notes documenting indication"
+            ]
+        },
+        "27447": {
+            "code": "27447",
+            "description": "Total knee arthroplasty",
+            "lcd_reference": "LCD-L33767",
+            "ncd_reference": null,
+            "medical_necessity_criteria": [
+                "Severe osteoarthritis with joint space narrowing",
+                "Failed conservative treatment >= 3 months",
+                "Significant functional impairment"
+            ],
+            "required_documentation": [
+                "X-ray or MRI showing degeneration",
+                "Physical therapy records",
+                "Functional assessment scores"
+            ]
+        },
+        "62322": {
+            "code": "62322",
+            "description": "Lumbar epidural steroid injection",
+            "lcd_reference": "LCD-L34826",
+            "ncd_reference": null,
+            "medical_necessity_criteria": [
+                "Radicular pain with nerve root involvement",
+                "Failed conservative treatment",
+                "Imaging showing correlating pathology"
+            ],
+            "required_documentation": [
+                "Clinical notes with radicular symptoms",
+                "MRI or CT imaging report"
+            ]
+        },
+        "92920": {
+            "code": "92920",
+            "description": "Percutaneous coronary intervention, single vessel",
+            "lcd_reference": "LCD-L33540",
+            "ncd_reference": "NCD-20.7",
+            "medical_necessity_criteria": [
+                "Acute coronary syndrome (STEMI, NSTEMI)",
+                "Significant coronary stenosis with symptoms"
+            ],
+            "required_documentation": [
+                "ECG/EKG results",
+                "Cardiac catheterization report",
+                "Troponin levels"
+            ]
+        },
+        "92921": {
+            "code": "92921",
+            "description": "PCI, each additional vessel",
+            "lcd_reference": "LCD-L33540",
+            "ncd_reference": "NCD-20.7",
+            "medical_necessity_criteria": [
+                "Multi-vessel coronary disease"
+            ],
+            "required_documentation": [
+                "Cardiac catheterization report"
+            ]
+        },
+        "99213": {
+            "code": "99213",
+            "description": "Office visit, established patient, low complexity",
+            "lcd_reference": null,
+            "ncd_reference": null,
+            "medical_necessity_criteria": [],
+            "required_documentation": []
+        }
+    },
+    "drugs": {
+        "J0129": {
+            "code": "J0129",
+            "drug_name": "adalimumab (Humira)",
+            "description": "TNF-alpha inhibitor for autoimmune conditions",
+            "lcd_reference": "LCD-L33346",
+            "step_therapy_required": true,
+            "covered_indications": [
+                "Rheumatoid Arthritis (RA)",
+                "Psoriatic Arthritis (PsA)",
+                "Ankylosing Spondylitis (AS)",
+                "Crohn's Disease",
+                "Ulcerative Colitis",
+                "Plaque Psoriasis"
+            ],
+            "medical_necessity_criteria": [
+                "Confirmed diagnosis of covered indication",
+                "Moderate to severe disease activity",
+                "For RA: DAS28 > 3.2",
+                "Failed adequate trial of first-line therapy",
+                "No contraindications (active infection, TB, hepatitis)"
+            ],
+            "step_therapy_requirements": [
+                "For RA: Methotrexate trial >= 3 months at 15-25mg/week",
+                "OR documented contraindication to methotrexate",
+                "For PsA: Trial of one conventional DMARD >= 3 months"
+            ],
+            "required_documentation": [
+                "Clinical notes with diagnosis and disease activity",
+                "Disease activity score (DAS28 for RA)",
+                "Failed DMARD documentation with dates and doses",
+                "Lab results (RF, Anti-CCP, CRP, ESR for RA)",
+                "TB screening (QuantiFERON or PPD)",
+                "Hepatitis B and C screening",
+                "Provider attestation form"
+            ]
+        },
+        "J0135": {
+            "code": "J0135",
+            "drug_name": "adalimumab-atto (Amjevita) - biosimilar",
+            "description": "TNF-alpha inhibitor biosimilar",
+            "lcd_reference": "LCD-L33346",
+            "step_therapy_required": true,
+            "covered_indications": [
+                "RA",
+                "PsA",
+                "AS",
+                "Crohn's",
+                "UC",
+                "Psoriasis"
+            ],
+            "medical_necessity_criteria": [
+                "Same as reference product"
+            ],
+            "step_therapy_requirements": [
+                "Same as adalimumab"
+            ],
+            "required_documentation": [
+                "Same as adalimumab"
+            ]
+        },
+        "J1745": {
+            "code": "J1745",
+            "drug_name": "infliximab (Remicade)",
+            "description": "TNF-alpha inhibitor (IV infusion)",
+            "lcd_reference": "LCD-L33346",
+            "step_therapy_required": true,
+            "covered_indications": [
+                "RA",
+                "PsA",
+                "AS",
+                "Crohn's",
+                "UC",
+                "Psoriasis"
+            ],
+            "medical_necessity_criteria": [
+                "Confirmed diagnosis",
+                "Moderate to severe disease",
+                "Failed first-line therapy"
+            ],
+            "step_therapy_requirements": [
+                "For RA: Methotrexate trial",
+                "For IBD: Conventional therapy trial"
+            ],
+            "required_documentation": [
+                "Clinical notes",
+                "Disease activity assessment",
+                "Step therapy documentation",
+                "TB and hepatitis screening"
+            ]
+        }
+    },
+    "valid_linkages": {
+        "72148|M54.5": "Lumbar MRI supported for low back pain",
+        "72148|M54.16": "Lumbar MRI supported for lumbar radiculopathy",
+        "72148|M54.17": "Lumbar MRI supported for lumbosacral radiculopathy",
+        "72148|M51.16": "Lumbar MRI supported for disc degeneration with radiculopathy",
+        "72148|M51.17": "Lumbar MRI supported for lumbosacral disc degeneration",
+        "72148|G89.29": "Lumbar MRI supported for chronic pain",
+        "72148|G83.4": "Lumbar MRI supported for cauda equina (urgent)",
+        "70553|G43.909": "Brain MRI supported for migraine",
+        "70553|C71.9": "Brain MRI supported for brain malignancy",
+        "27447|M17.11": "TKA supported for OA right knee",
+        "27447|M17.12": "TKA supported for OA left knee",
+        "62322|M54.16": "Epidural supported for radiculopathy",
+        "62322|M51.16": "Epidural supported for disc herniation",
+        "92920|I21.0": "PCI supported for anterior STEMI",
+        "92920|I21.1": "PCI supported for inferior STEMI",
+        "92921|I21.0": "Additional vessel PCI supported",
+        "J0129|M05.79": "Adalimumab supported for seropositive RA",
+        "J0129|M06.09": "Adalimumab supported for seronegative RA",
+        "J0129|M05.70": "Adalimumab supported for RA",
+        "J0129|L40.50": "Adalimumab supported for psoriatic arthritis",
+        "J0129|K50.90": "Adalimumab supported for Crohn's disease",
+        "J1745|M05.79": "Infliximab supported for RA",
+        "J1745|K50.90": "Infliximab supported for Crohn's"
+    }
+}
