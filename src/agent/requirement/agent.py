@@ -22,6 +22,17 @@ from .state import (
     EvaluatorVerdict,
     RequireItemResult,
 )
+from .system_prompts import (
+    PARSER_SYSTEM_PROMPT,
+    GATHERER_SYSTEM_PROMPT,
+    GATHERER_DECISION_PROMPT,
+    EVALUATOR_SYSTEM_PROMPT,
+)
+from .user_prompts_builder import (
+    build_parser_user_prompt,
+    build_gatherer_user_prompt,
+    build_evaluator_user_prompt,
+)
 from ...tools import search_patient_documents, get_patient_health_record, get_procedure_details
 from ...models.core import ServiceInfo, ClinicalContext
 
@@ -39,111 +50,6 @@ REQUIREMENT_HANDLER_TOOLS = [
 ]
 
 
-PARSER_SYSTEM_PROMPT = """You are an Requirement parser that converts requested information into structured items.
-
-For each requested item, determine:
-1. A clear concise description of what's being requested
-2. The document type if it's a document request (clinical_note, lab_result, imaging_report, etc.)
-3. Keywords that would help search for this information
-
-Output a list of parsed Requirement items."""
-
-
-GATHERER_SYSTEM_PROMPT = """You are a healthcare data gatherer agent responsible for finding information to respond to Requirement.
-
-Your role is to:
-1. Search for relevant documents and clinical information using the available tools
-2. Gather comprehensive data that addresses the specific Requirement
-3. Report what you found with confidence level
-
-## IMPORTANT RULES
-1. You must not invent clinical facts or coverage rules you cannot verify
-2. Only use the data provided to make decision
-3. Do not make assumptions beyond what the data shows
-4. Only derive information from the data presented and always provide specific evidence
-
-## Process
-1. Analyze the Requirement item to understand what's being requested
-2. Use appropriate tools to search for the information
-3. Gather all relevant data that could satisfy the request
-4. Report your findings with a summary and confidence score
-
-{case_context}
-
-Search for information to satisfy this Requirement request:
-Requirement Item: {description}
-Document Type: {document_type}
-Keywords: {keywords}
-
-Use the available tools to find relevant documents and information.
-
-"""
-
-
-EVALUATOR_SYSTEM_PROMPT = """You are a quality evaluator that determines if gathered data satisfies Requirement requests.
-
-Your role is to:
-1. Review what was requested in the Requirement item
-2. Evaluate if the gathered data adequately addresses the request
-3. Identify any major gaps in the information
-4. Determine if human intervention is needed
-
-## Evaluation Criteria
-
-- Does the gathered data address what was requested?
-- Is the information complete and current?
-- Are there any major gaps that could cause the Requirement response to be rejected?
-- Is any major additional information should be gathered?
-
-## When to Require Human in the loop
-
-- Document doesn't exist and needs to be created (e.g., letter of medical necessity)
-- Information requires clinical judgment to compile
-- Sensitive information that needs clinician review before submission
-- Ambiguous request that needs clarification
-
-{case_context}
-
-## Requested Requirement: {requirement}
-
-## Gathered Data: 
-{gatherer_result}
-"""
-
-
-def get_case_context(state: GathererState) -> str:
-    # Build context
-    context_parts = []
-    
-    if state.get("service_details"):
-        service = state.get("service_details")
-        context_parts.append(f"""
-## Service Information
-- CPT Codes: {service.cpt_codes}
-- HCPCS Codes: {service.hcpcs_codes}
-- Diagnosis Codes (ICD-10): {service.dx_codes}
-- Site of Service: {service.site_of_service}
-- Requested Units: {service.requested_units}
-- Service Period: {service.service_start_date} to {service.service_end_date}
-- Urgency Level: {service.urgency_level}
-""")
-    
-    if state.get("clinical_context"):
-        clinical = state.get("clinical_context")
-        context_parts.append(f"""
-## Clinical Context
-- Primary Diagnosis: {clinical.primary_diagnosis}
-- Supporting Diagnoses: {clinical.supporting_diagnoses}
-- Relevant History: {clinical.relevant_history}
-- Prior Treatments: {clinical.prior_treatments}
-- Clinical Notes: {clinical.clinical_notes}
-""")
-
-    if context_parts:
-        return "# Case Context:\n\n" + "\n".join(context_parts)
-    return ""
-
-
 def create_gatherer_subgraph(llm: ChatOpenAI):
     """Create the gatherer subgraph with isolated state per Require item."""
     
@@ -152,14 +58,11 @@ def create_gatherer_subgraph(llm: ChatOpenAI):
         parsed_require_item: ParsedRequireItem = state["parsed_require_item"]
         log_requirement(f"Searching for: {parsed_require_item.original_request[:50]}...")
         
-        system_prompt = GATHERER_SYSTEM_PROMPT.format(
-            case_context=get_case_context(state),
-            description=parsed_require_item.description,
-            document_type=parsed_require_item.document_type.value if parsed_require_item.document_type else "Not specified",
-            keywords=", ".join(parsed_require_item.keywords) if parsed_require_item.keywords else "None"
-        )
-
-        messages = [SystemMessage(content=system_prompt)] + state["messages"]
+        user_prompt = build_gatherer_user_prompt(state)
+        messages = [
+            SystemMessage(content=GATHERER_SYSTEM_PROMPT),
+            HumanMessage(content=user_prompt)
+        ] + state["messages"]
         
         llm_with_tools = llm.bind_tools(REQUIREMENT_HANDLER_TOOLS)
         response = await llm_with_tools.ainvoke(messages)
@@ -169,25 +72,14 @@ def create_gatherer_subgraph(llm: ChatOpenAI):
     
     async def gather_decision_node(state: GathererState) -> dict:
         """Gatherer produces structured result after searching."""
-        parsed_require_item: ParsedRequireItem = state["parsed_require_item"]
-
-        system_prompt = GATHERER_SYSTEM_PROMPT.format(
-            case_context=get_case_context(state),
-            description=parsed_require_item.description,
-            document_type=parsed_require_item.document_type.value if parsed_require_item.document_type else "Not specified",
-            keywords=", ".join(parsed_require_item.keywords) if parsed_require_item.keywords else "None"
-        )
+        user_prompt = build_gatherer_user_prompt(state)
         
-        decision_prompt = """Based on your search, provide a structured result for this Requirement item:
-
-Provide:
-- status: found, partially_found, or not_found
-- found_documents: List of documents found (with document_id, title, type)
-- found_information: Any relevant information found
-- search_summary: Summary of what you searched for
-- confidence: Your confidence in the findings (0.0-1.0)"""
-
-        messages = [SystemMessage(content=system_prompt)] + state["messages"] + [HumanMessage(content=decision_prompt)]
+        messages = [
+            SystemMessage(content=GATHERER_SYSTEM_PROMPT),
+            HumanMessage(content=user_prompt)
+        ] + state["messages"] + [
+            HumanMessage(content=GATHERER_DECISION_PROMPT)
+        ]
 
         gatherer_structured_llm = llm.with_structured_output(GathererResult)
         result = await gatherer_structured_llm.ainvoke(messages)
@@ -196,16 +88,14 @@ Provide:
     
     async def evaluator_node(state: GathererState) -> dict:
         """Evaluate if gathered data satisfies the Requirement request."""
-        parsed_require_item: ParsedRequireItem = state["parsed_require_item"]
         gatherer_result: GathererResult = state["gather_result"]
-
-        system_prompt = EVALUATOR_SYSTEM_PROMPT.format(
-            case_context=get_case_context(state),
-            requirement=parsed_require_item.original_request,
-            gatherer_result=gatherer_result.model_dump_json(indent=2)
-        )
-
-        messages = [SystemMessage(content=system_prompt)] + state["messages"]
+        
+        user_prompt = build_evaluator_user_prompt(state, gatherer_result)
+        messages = [
+            SystemMessage(content=EVALUATOR_SYSTEM_PROMPT),
+            HumanMessage(content=user_prompt)
+        ]
+        
         evaluator_structured_llm = llm.with_structured_output(EvaluatorVerdict)
         verdict = await evaluator_structured_llm.ainvoke(messages)
                 
@@ -256,16 +146,12 @@ def create_requirement_handler_agent(model_id: str = "gpt-4o"):
         """Parse raw Requirement requests into structured items."""
         require_items: List[RequireItem] = state["require_items"]
         
-        parse_prompt = f"""Parse these Requirement items into structured format:
-
-Requested Items:
-{chr(10).join(f"Item_Id: {item.item_id} - {item.requested_item}" for item in require_items)}
-"""
+        user_prompt = build_parser_user_prompt(require_items)
 
         parser_llm = llm.with_structured_output(ParsedRequireItemList)
         parsed_require_items: ParsedRequireItemList = await parser_llm.ainvoke([
             SystemMessage(content=PARSER_SYSTEM_PROMPT),
-            HumanMessage(content=parse_prompt)
+            HumanMessage(content=user_prompt)
         ])
         
         return {
