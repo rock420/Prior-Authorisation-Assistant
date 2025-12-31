@@ -110,7 +110,6 @@ def build_appeal_letter(
         clinical_justification=content.clinical_justification,
         denial_rebuttal=content.denial_rebuttal,
         supporting_evidence_summary=content.supporting_evidence_summary,
-        literature_section=literature_section,
         provider_name=provider_name,
         provider_organization=provider_organization,
         provider_npi=provider_npi,

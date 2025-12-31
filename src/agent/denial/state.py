@@ -1,6 +1,7 @@
 """State schema for the denial evaluator agent."""
 
-from typing import List, Optional, Dict, Any, Literal
+import operator
+from typing import List, Optional, Dict, Any, Literal, Annotated
 from datetime import datetime
 from pydantic import BaseModel, Field
 from langgraph.graph import MessagesState
@@ -20,6 +21,7 @@ class DenialCategory(str, Enum):
     PLACE_OF_SERVICE = "place_of_service"
     OTHER = "other"
 
+REVISE_CATEGORIES = [DenialCategory.MISSING_DOCUMENTATION, DenialCategory.INCORRECT_CODE, DenialCategory.MISSING_DETAILS]
 
 class RecommendedAction(str, Enum):
     """Recommended next steps after denial evaluation."""
@@ -33,29 +35,43 @@ class DenialDetails(BaseModel):
     denial_reason: str = Field(None, description="Reason for denial")
     decision_details: Optional[Dict[str, Any]] = Field(None, description="Details of denial")
 
+class DenialCategorization(BaseModel):
+    category: DenialCategory = Field(..., description="The categorized denial type")
+    root_cause: str = Field(..., description="Root cause for the denial")
+    confidence: float = Field(..., ge=0.0, le=1.0, description="Confidence in categorization")
 
-# Structured output for Judge
-class JudgeVerdict(BaseModel):
-    """Structured verdict from the judge."""
-    verdict: Literal["APPROVED", "REVISE"] = Field(..., description="Whether to approve or request revision")
-    reasoning: str = Field(..., description="Explanation for the verdict")
-    suggestions: List[str] = Field(default_factory=list, description="Suggestions if revision needed")
-    confidence: float = Field(..., ge=0.0, le=1.0, description="Confidence in verdict")
-
-# Structured output for final result
-class EvaluationResult(BaseModel):
-    """Final structured evaluation result."""
-    denial_category: DenialCategory = Field(..., description="Categorized denial type")
-    recommended_action: RecommendedAction = Field(..., description="Recommended next step")
-    confidence_score: float = Field(..., ge=0.0, le=1.0, description="Confidence in recommendation")
-    justification: str = Field(..., description="Detailed reasoning for the decision about recommended_action")
-    supporting_evidence: List[str] = Field(..., description="Evidence supporting the recommendation")
-    contradicting_evidence: List[str] = Field(..., description="Evidence that contradicts the denial reason")
+class GapAnalysis(BaseModel):
+    """Analysis of gaps between denial and supporting documentation."""
+    required_evidence: List[str] = Field(..., description="List of evidence requirements to close the gap")
+    identified_gaps: List[str] = Field(..., description="Gaps found for the denial reason")
+    search_plan: List[str] = Field(..., description="Specific instructions/plan for gathering data using EHR/Policy/Medical research tools")
+    policy_references: List[str] = Field(default_factory=list, description="Relevant section/page references from policy document")
+    rationale: str = Field(default="", description="explanation for the required_evidence and search plan")
     
-    # Action-specific details
-    required_next_steps: List[str] = Field(..., description="Specific actions needed")
-    required_documentation: List[str] = Field(default_factory=list, description="Documents needed if resubmitting or appeal")
-    code_corrections: List[str] = Field(default_factory=list, description="List of incorrect codes")
+class Evidence(BaseModel):
+    """Evidence gathered during gap analysis."""
+    source: str = Field(..., description="Where evidence was found, mention specific section/page reference and source type")
+    evidence_type: str = Field(..., description="Type of evidence (e.g., 'clinical_guideline', 'lab_result', 'policy', etc.)")
+    fact: str = Field(..., description="The actual evidence content as it's")
+    relevance: float = Field(..., ge=0.0, le=1.0, description="Relevance score as a decimal between 0.0 and 1.0")
+
+class EvidenceGathering(BaseModel):
+    found_evidences: List[Evidence] = Field(..., description="List of evidence gathered")
+    missing_evidence: List[str] = Field(..., description="List of evidence you couldn't find")
+
+class Judgement(BaseModel):
+    recommendation: RecommendedAction = Field(..., description="Recommended next step based on evidence gathered")
+    rationale: str = Field(..., description="Internal technical explanation of why this path was chosen.")
+    confidence_score: float = Field(..., ge=0.0, le=1.0, description="Confidence in recommendation")
+    evidence_citations: List[int] = Field(..., description="List of indices of found evidence used in this judgement, 0 based indexing")
+
+    appeal_strength_score: int = Field(ge=0, le=100, description="Confidence score (0-100) in winning the appeal if recommendation is Appeal")
+    clinical_argument_summary: Optional[str] = Field(description="The 'Bridge' argument: Why the found evidence satisfies the payer policy, if recommendation is Appeal" )
+    required_documentation: Optional[List[str]] = Field(default_factory=list, description="Documents needed if resubmitting or appeal")
+
+    write_off_reason: Optional[str] = Field(description="Why we should stop: e.g., 'Policy explicitly excludes this service under all conditions'.")
+    require_more_evidence: Optional[List[str]] = Field(default_factory=list, description="If more evidence is needed, list what that is")
+    search_plan: List[str] = Field(..., description="Specific instructions/plan for gathering data using EHR/Policy/Medical research tools")
 
 
 class DenialEvaluatorState(MessagesState):
@@ -65,19 +81,32 @@ class DenialEvaluatorState(MessagesState):
     denial_details: DenialDetails
     service_details: ServiceInfo
     clinical_context: ClinicalContext
-    
-    # Evaluator output
-    evaluator_decision: str
-    tool_call_count: int
-    
-    # Judge output
-    judge_verdict: JudgeVerdict
+
+    # Categorization output
+    category: DenialCategory
+    root_cause: str
+
+    # Gap analysis output
+    required_evidence: List[str]
+    search_plan: List[str]
+    policy_references: List[str]
+
+    #Evidence gatherer
+    found_evidence: Annotated[List[Evidence], operator.add]
+    missing_evidence: List[str]
+
+    #Judge
+    recommendation: RecommendedAction
+    judgement: Judgement
     revision_count: int
     
-    # Final output
-    evaluation_result: EvaluationResult
 
 class DenialEvaluationResult(BaseModel):
-    evaluation_result: Optional[EvaluationResult]
-    judge_verdict: Optional[JudgeVerdict]
-    revision_count: int
+    root_cause: str
+    recommendation: RecommendedAction
+    confidence_score: float
+    evidences: List[Evidence]
+    appeal_strength_score: Optional[int]
+    clinical_argument_summary: Optional[str]
+    required_documentation: Optional[List[str]]
+    policy_references: List[str]

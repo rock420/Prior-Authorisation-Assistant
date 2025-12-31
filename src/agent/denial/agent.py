@@ -1,21 +1,41 @@
-"""LangGraph agent for evaluating PA denial decisions."""
+"""Workflow for evaluating PA denial decisions."""
 
 import json
 from typing import Literal, Optional, Dict, Any
-from langchain_core.messages import SystemMessage, HumanMessage, AIMessage, ToolMessage
+from langchain_core.messages import SystemMessage, HumanMessage
 from langchain_openai import ChatOpenAI
 from langgraph.graph import StateGraph, END
+from langgraph.graph.state import CompiledStateGraph
 from langgraph.prebuilt import ToolNode
+from langchain.agents import create_agent
+from langchain.agents.structured_output import ProviderStrategy
 from langchain_core.runnables import RunnableConfig
+from langgraph.runtime import Runtime
 
 
 from .state import (
     DenialEvaluatorState,
-    EvaluationResult,
     DenialDetails,
-    DenialCategory,
-    JudgeVerdict,
-    DenialEvaluationResult
+    GapAnalysis,
+    Evidence,
+    EvidenceGathering,
+    Judgement,
+    RecommendedAction,
+    DenialCategorization,
+    DenialEvaluationResult,
+    REVISE_CATEGORIES
+)
+from .system_prompts import (
+    CATEGORIZER_SYSTEM_PROMPT,
+    GAP_ANALYSIS_SYSTEM_PROMPT,
+    EVIDENCE_GATHERER_SYSTEM_PROMPT,
+    REASONING_SYSTEM_PROMPT
+)
+from .user_prompts_builder import (
+    build_categorizer_user_prompt,
+    build_gap_analysis_user_prompt,
+    build_evidence_gatherer_user_prompt,
+    build_reasoning_user_prompt
 )
 from ...tools import (
     search_patient_documents,
@@ -30,259 +50,148 @@ from ...tools import (
 from ...models.core import ServiceInfo, ClinicalContext
 
 
-DENIAL_EVALUATOR_TOOLS = [
-    get_patient_health_record,
-    get_procedure_details,
-    get_drug_coverage_details,
-    check_step_therapy_requirements,
-    validate_codes,
-    lookup_policy_criteria,
-    search_patient_documents,
-]
+def create_gap_analysis_agent(model_id) -> CompiledStateGraph:
+    model = ChatOpenAI(model=model_id, timeout=20, max_retries=3)
+    agent = create_agent(
+        model=model,
+        tools=[lookup_policy_criteria],
+        system_prompt=GAP_ANALYSIS_SYSTEM_PROMPT,
+        response_format=ProviderStrategy(GapAnalysis)
+    )
+    return agent
 
-EVALUATOR_SYSTEM_PROMPT = f"""You are a healthcare prior authorization denial evaluator agent.
-
-Your role is to:
-1. Gather relevant data using the available tools and root causing the denial reason
-2. Analyze the denial reason against patient records, procedure details, and payer policies
-3. Identify evidence that supports or contradicts the denial
-4. Make a decision on denial category and recommended action with clear justification
-
-## IMPORTANT RULES
-1. You must not invent clinical facts or coverage rules you cannot verify
-2. Only use the data provided to make decision
-3. Do not make assumptions beyond what the data shows
-4. When in doubt, gather more information before deciding
-5. Always provide specific evidence for your claims
-7. If you cannot make a confident decision or no enough data, indicate uncertainty and recommend next steps
-8. Don't invoke the tool repeatedly with same kind of input 
-
-
-## Denial Categories
-Classify the denial into: {", ".join([d.value for d in DenialCategory])}
-
-## Recommended Actions
-- appeal: Strong case for overturning through formal appeal (use when evidence contradicts denial)
-- revise_and_resubmit: Fix issues and submit new PA request (use when documentation is missing but obtainable)
-- final_denial: No viable path to approval (use only when denial is clearly valid)
-
-## Process
-1. Gather all relevant data using tools
-2. Analyze evidence for and against the denial
-3. Finally when your evaluation is done and you have reached to a conclusion , Provide your decision in this format:
-
-DECISION:
-- denial_category: [category]
-- recommended_action: [action]
-- confidence: [0.0-1.0]
-
-JUSTIFICATION:
-[Detailed reasoning with specific evidence from gathered data]
-
-SUPPORTING_EVIDENCE:
-[MANDATORY - List actual evidence/citation supporting your decision/justification]
-
-AMBIGOUS_EVIDENCE:
-[List actual evidence/citation that contradicts your justification or you not able to make sense]
-
-REQUIRED_NEXT_STEPS:
-[Specific actions needed]
-
-4. If there is not much details or documents to supports or contradicts the denial, only provide the denial_category for the denial reason
-- denial_category: [category]
-- confidence: [0.0-1.0]
-- NOT_ENOUGH_DATA_FOUND
-"""
+def create_evidence_gatherer_agent(model_id):
+    model = ChatOpenAI(model=model_id, timeout=20, max_retries=3)
+    agent = create_agent(
+        model=model,
+        tools=[
+            get_patient_health_record,
+            get_procedure_details,
+            get_drug_coverage_details,
+            check_step_therapy_requirements,
+            validate_codes,
+            search_patient_documents,
+        ],
+        system_prompt=EVIDENCE_GATHERER_SYSTEM_PROMPT,
+        response_format=ProviderStrategy(EvidenceGathering),
+    )
+    return agent
 
 
-JUDGE_SYSTEM_PROMPT = """You are a healthcare quality assurance judge reviewing prior authorization denial evaluation decisions.
-
-Your role is to:
-1. Review the evaluator's decision and justification alongside supporting/contradicting evidence
-2. Verify the reasoning is sound and supported by the gathered data
-3. Check for logical gaps or missed considerations
-4. Either APPROVE the decision or send it back with SUGGESTIONS
-
-## Review Criteria
-- Is the denial category correctly identified?
-- Is the recommended action appropriate given the evidence?
-- Is the justification well-supported by the citations/evidence?
-- Is all the data used for coming to the decision grounded to tool response without any hallucination?
-- Are there any contradictions or gaps in reasoning?
-
-Response with your verdict of APPROVED/REVISION alongside justification and confidence. Also provide suggestions for REVISION.
-"""
-
-
-OUTPUT_SYSTEM_PROMPT = """You are responsible for producing the final structured output for a pre-authorisation denial evaluation.
-
-Take the approved evaluation decision and format it as a structured response.
-"""
-
-
-def create_denial_evaluator_agent(model_id: str = "gpt-4o-mini"):
-    """Create the denial evaluator LangGraph agent with evaluator, judge, and output nodes."""
+def create_denial_evaluation_workflow(model_id: str = "gpt-4o-mini"):
+    """Create the denial evaluator workflow"""
     
     # Initialize LLMs
-    llm = ChatOpenAI(model=model_id)
-    
-    async def evaluator_node(state: DenialEvaluatorState) -> dict:
-        """Evaluator agent that gathers data and makes initial decision."""
-        messages = state["messages"]
-        messages = [SystemMessage(content=EVALUATOR_SYSTEM_PROMPT)] + messages
-        
-        # If we have judge feedback, add it to context
-        if state.get("judge_verdict"):
-            feedback_msg = HumanMessage(content=f"""
-The judge has reviewed your previous decision and requests revision:
+    llm = ChatOpenAI(model=model_id, timeout=20, max_retries=3)
+    gap_analyst = create_gap_analysis_agent(model_id)
+    evidence_gatherer = create_evidence_gatherer_agent(model_id)
 
-{state['judge_verdict'].suggestions}
+    async def categorizer_node(state: DenialEvaluatorState) -> dict:
+        """Categorize the denial decision."""
 
-Please reconsider your analysis and provide an updated decision.""")
-            messages = messages + [feedback_msg]
-        
-        llm_with_tools = llm.bind_tools(DENIAL_EVALUATOR_TOOLS)
-        response = await llm_with_tools.ainvoke(messages)
-        
-        # Check if response contains a decision (no more tool calls needed)
-        has_decision = "DECISION:" in response.content if hasattr(response, 'content') else False
-        
-        return {
-            "messages": [response],
-            "evaluator_decision": response.content if has_decision else None
-        }
-    
-    # Tool node with result printing
-    _tool_node = ToolNode(DENIAL_EVALUATOR_TOOLS)
-    
-    async def tool_node(state: DenialEvaluatorState) -> dict:
-        """Execute tools and print results."""
-        result = await _tool_node.ainvoke(state)
-        # Print tool results
-        # for msg in result.get("messages", []):
-        #     if isinstance(msg, ToolMessage):
-        #         print_tool_result(msg)
-        return { **result, "tool_call_count": state.get("tool_call_count", 0) + 1 }
-    
-    # Judge
-    async def judge_node(state: DenialEvaluatorState) -> dict:
-        """Judge reviews the evaluator's decision."""
-
-        messages = state["messages"]
-        messages = [SystemMessage(content=JUDGE_SYSTEM_PROMPT)] + messages
-        
-        llm_with_structure_output = llm.with_structured_output(schema=JudgeVerdict)
-        response : JudgeVerdict = await llm_with_structure_output.ainvoke(messages)
-        
-        return {
-            "judge_verdict": response,
-            "revision_count": state.get("revision_count", 0) + 1,
-            "tool_call_count": 0
-        }
-    
-    # Node 3: Output formatter
-    async def output_node(state: DenialEvaluatorState) -> dict:
-        """Format the final structured output."""
-
-        # Output the structured JSON response."""
-        evaluator_decision = state.get("evaluator_decision", "")
-        #messages = state["messages"]
+        user_message = build_categorizer_user_prompt(state)
         messages = [
-            SystemMessage(content=OUTPUT_SYSTEM_PROMPT),
-            AIMessage(content=evaluator_decision)
+            SystemMessage(content=CATEGORIZER_SYSTEM_PROMPT),
+            HumanMessage(content=user_message)
         ]
+
+        llm_with_structure_output = llm.with_structured_output(schema=DenialCategorization)
+        response: DenialCategorization = await llm_with_structure_output.ainvoke(messages)
+
+        if response.category in REVISE_CATEGORIES:
+            return {
+                "category": response.category,
+                "root_cause": response.root_cause,
+                "recommendation": RecommendedAction.REVISE_AND_RESUBMIT
+            }
+
+        return {
+            "category": response.category,
+            "root_cause": response.root_cause
+        }
+
+    async def gap_analyst_node(state: DenialEvaluatorState, runtime: Runtime) -> dict:
+
+        user_message = build_gap_analysis_user_prompt(state)
+        result = await gap_analyst.ainvoke(
+            {"messages": [HumanMessage(content=user_message)]},
+            context=runtime.context
+        )
+        response: GapAnalysis = result["structured_response"]
+
+        return {
+            "required_evidence": response.required_evidence,
+            "search_plan": response.search_plan,
+            "policy_references": response.policy_references
+        }
+
+    async def evidence_gather_node(state: DenialEvaluatorState, runtime: Runtime) -> dict:
+
+        user_message = build_evidence_gatherer_user_prompt(state)
+        result = await evidence_gatherer.ainvoke(
+            {"messages": [HumanMessage(content=user_message)]},
+            context=runtime.context
+        )
+        response: EvidenceGathering = result["structured_response"]
+
+        return {
+            "found_evidence": response.found_evidences,
+            "missing_evidence": response.missing_evidence,
+        }
+
+    async def reasoning_node(state: DenialEvaluatorState) -> dict:
+        print("inside reasoning_node")
+        user_message = build_reasoning_user_prompt(state)
+        messages = [
+            SystemMessage(content=REASONING_SYSTEM_PROMPT),
+            HumanMessage(content=user_message)
+        ]
+        llm_with_structure_output = llm.with_structured_output(schema=Judgement)
+        response: Judgement = await llm_with_structure_output.ainvoke(messages)
         
-        llm_with_structure_output = llm.with_structured_output(schema=EvaluationResult)
-        response : EvaluationResult = await llm_with_structure_output.ainvoke(messages)
+        revision_count = state.get("revision_count", 0)
+        print(response.confidence_score)
+        if response.confidence_score < 0.7 and response.require_more_evidence and revision_count < 1:
+            return {
+                "required_evidence": response.require_more_evidence,
+                "search_plan": response.search_plan,
+                "need_revision": True,
+                "revision_count": revision_count + 1
+            }
         
         return {
-            "evaluation_result": response,
+            "judgement": response,
+            "recommendation": response.recommendation,
+            "need_revision": False,
         }
-    
-    def route_after_evaluator(state: DenialEvaluatorState) -> Literal["tools", "judge"]:
-        """Route after evaluator: to tools if tool calls, to judge if decision made."""
-        messages = state["messages"]
-        last_message = messages[-1]
-        
-        # If has tool calls, go to tools
-        if hasattr(last_message, "tool_calls") and last_message.tool_calls:
-            return "tools"
-        
-        # If decision made, go to judge
-        return "judge"
-    
-    def route_after_judge(state: DenialEvaluatorState) -> Literal["evaluator", "output", END]:
-        """Route after judge: back to evaluator if revise, to output if approved."""
-        # Limit revisions to prevent infinite loops
-        if state.get("revision_count", 0) >= 2:
-            return "output" if state.get("evaluator_decision") else END
-        
-        if state.get("judge_verdict") and state.get("judge_verdict").verdict == "APPROVED":
-            return "output"
-        
-        return "evaluator"
+
+    def route_after_categorize(state: DenialEvaluatorState) -> Literal["gap_analyst", END]:
+        if state.get("recommendation"):
+            return END
+        return "gap_analyst"
+
+    def route_after_reasoning(state: DenialEvaluatorState) -> Literal["evidence_gatherer", END]:
+        if state.get("need_revision", False):
+            return "evidence_gatherer"
+        return END
     
 
     workflow = StateGraph(DenialEvaluatorState)
-    workflow.add_node("evaluator", evaluator_node)
-    workflow.add_node("tools", tool_node)
-    workflow.add_node("judge", judge_node)
-    workflow.add_node("output", output_node)
+    workflow.add_node("categorize", categorizer_node)
+    workflow.add_node("gap_analyst", gap_analyst_node)
+    workflow.add_node("evidence_gatherer", evidence_gather_node)
+    workflow.add_node("reasoner", reasoning_node)
     
-    # Set entry point
-    workflow.set_entry_point("evaluator")
-    
-    # Add edges
-    workflow.add_conditional_edges("evaluator", route_after_evaluator)
-    workflow.add_conditional_edges("tools", lambda state: "evaluator" if state.get("tool_call_count", 0)<10 else "judge")
-    workflow.add_conditional_edges("judge", route_after_judge)
-    workflow.add_edge("output", END)
+    workflow.set_entry_point("categorize")
+    workflow.add_conditional_edges("categorize", route_after_categorize)
+    workflow.add_edge("gap_analyst", "evidence_gatherer")
+    workflow.add_edge("evidence_gatherer", "reasoner")
+    workflow.add_conditional_edges("reasoner", route_after_reasoning)
     
     return workflow.compile()
 
 
-def get_case_context(state: DenialEvaluatorState) -> str:
-    # Build context
-    context_parts = []
-
-    if state.get("denial_details"):
-        denial = state["denial_details"]
-        context_parts.append(f"""
-## Denial Information
-- Denial Reason: {denial.denial_reason or 'Not provided'}
-- Decision Details: {denial.decision_details or 'Not provided'}
-""")
-        
-    if state.get("service_details"):
-        service = state["service_details"]
-        context_parts.append(f"""
-## Service Information
-- CPT Codes: {service.cpt_codes}
-- HCPCS Codes: {service.hcpcs_codes}
-- Diagnosis Codes (ICD-10): {service.dx_codes}
-- Site of Service: {service.site_of_service}
-- Requested Units: {service.requested_units}
-- Service Period: {service.service_start_date} to {service.service_end_date}
-- Urgency Level: {service.urgency_level}
-""")
-        
-    if state.get("clinical_context"):
-        clinical = state["clinical_context"]
-        context_parts.append(f"""
-## Clinical Context
-- Primary Diagnosis: {clinical.primary_diagnosis}
-- Supporting Diagnoses: {clinical.supporting_diagnoses}
-- Relevant History: {clinical.relevant_history}
-- Prior Treatments: {clinical.prior_treatments}
-- Clinical Notes: {clinical.clinical_notes}
-""")
-
-    if context_parts:
-        return "\n\n# Evaluate this PA denial:\n\n" + "\n".join(context_parts)
-    return ""
-
-
-_denial_evaluator_agent = create_denial_evaluator_agent()
+_denial_evaluation_workflow = create_denial_evaluation_workflow()
 
 async def evaluate_denial(
     patient_id: str,
@@ -302,25 +211,65 @@ async def evaluate_denial(
     )
     
     initial_state : DenialEvaluatorState = {
-        "patient_id": patient_id,
         "denial_details": denial_details,
         "service_details": service_details,
         "clinical_context": clinical_context,
         "revision_count": 0
     }
-    initial_state["messages"] = [HumanMessage(content=get_case_context(initial_state))]
     
-    result = await _denial_evaluator_agent.ainvoke(
+    result = await _denial_evaluation_workflow.ainvoke(
         initial_state,
-        config = RunnableConfig(recursion_limit=50),
+        config = RunnableConfig(recursion_limit=70),
         context={
                 "patient_id": patient_id, 
                 "pa_request_id": pa_request_id, 
                 "payer_id": payer_id, 
                 "plan_id": plan_id
         })
+
+    judgement: Judgement = result.get("judgement")
+    evidences: List[Evidence] = []
+    if judgement:
+        for citation in judgement.evidence_citations:
+            try:
+                evidences.append(result.get("found_evidence")[citation])
+            except:
+                continue
+
+
     return DenialEvaluationResult(
-        evaluation_result=result.get("evaluation_result", None),
-        judge_verdict=result.get("judge_verdict", None),
-        revision_count=result.get("revision_count", 0),
+        recommendation=result.get("recommendation"),
+        confidence_score=judgement.confidence_score if judgement else 1.0, #for only categorization case
+        root_cause=result.get("root_cause"),
+        evidences=evidences,
+        appeal_strength_score=judgement.appeal_strength_score if judgement else 0,
+        clinical_argument_summary=judgement.clinical_argument_summary if judgement else None,
+        required_documentation=judgement.required_documentation if judgement else None,
+        policy_references=result.get("policy_references", [])
     )
+
+
+if __name__ == "__main__":
+    import asyncio
+    from ...intake_scenarios import get_intake
+    from ..state import PAIntake
+
+    intake = PAIntake(**(get_intake("PA-SCENARIO-C")))
+
+    async def main():
+        result = await evaluate_denial(
+            patient_id=intake.patient_id,
+            denial_reason="Medical necessity not established - duplicate imaging within 12 months without documented clinical change",
+            decision_details={
+                "prior_mri_date": "2024-08-15",
+                "prior_mri_findings": "L4-L5 left paracentral disc herniation with L5 nerve root compression"
+            },
+            pa_request_id=intake.pa_request_id,
+            payer_id="BCBS001",
+            plan_id="PLAN001",
+            service_details=intake.service_info,
+            clinical_context=ClinicalContext(clinical_notes=intake.clinical_notes, primary_diagnosis="Intervertebral disc degeneration, lumbar region")
+        )
+        print(json.dumps(result.model_dump(), indent=2))
+
+    asyncio.run(main())

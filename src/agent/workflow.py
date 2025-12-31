@@ -12,18 +12,23 @@ from ..integrations.ehr_service import get_patient_summary
 from ..integrations.provider import get_provider_details, create_task_for_staff
 from ..integrations.payer_service import check_coverage, is_pa_required, submit_pa, check_pa_status, upload_documents
 from .denial import evaluate_denial, DenialEvaluationResult, RecommendedAction
-from .denial.state import DenialCategory
+from .denial.state import DenialCategory, Evidence
 from .requirement import handle_requirements, RequireItem, RequireItemStatus, RequireItemResult
-from .pa_status_poller import track_submission
-from .hitl_task_poller import track_hitl_task
+from ..pa_status_poller import track_submission
+from ..hitl_task_poller import track_hitl_task
+from .system_prompts import APPEAL_DRAFT_SYSTEM_PROMPT
+from .user_prompts_builder import build_appeal_user_prompt
 
 
 from langchain_openai import ChatOpenAI
 from langgraph.errors import NodeInterrupt
 from langgraph.graph import StateGraph, END
 from langgraph.checkpoint.memory import MemorySaver
+from langchain_core.messages import SystemMessage, HumanMessage
+
 from uuid import uuid4
 
+model = ChatOpenAI(model="gpt-4o-mini", timeout=20, max_retries=3)
 _memory: Optional[MemorySaver] = None
 
 def get_memory() -> MemorySaver:
@@ -244,8 +249,7 @@ async def denial_node(state: PAAgentState) -> PAAgentState:
         clinical_context=state.get("clinical_context")
     )
 
-    #or result.judge_verdict.verdict != "APPROVED"
-    if not result.evaluation_result:
+    if result.confidence_score<0.7:
         ##agent not able to conclude, create HITL task
         pa_request_id: str = state.get("pa_request_id")
         clinician_id: str = state.get("clinician_id")
@@ -289,41 +293,19 @@ async def appeal_node(state: PAAgentState) -> PAAgentState:
     provider_info: ProviderInfo = state.get("provider_info")
     clinician_id: str = state.get("clinician_id")
     
-    eval_result = denial_evaluation.evaluation_result
+    # Build prompts
+    user_prompt = build_appeal_user_prompt(
+        denial_evaluation=denial_evaluation,
+        pa_status=pa_status,
+        service_info=service_info,
+        clinical_context=clinical_context
+    )
     
-    content_prompt = f"""You are a healthcare appeals specialist. Generate the dynamic content sections for a prior authorization appeal letter.
-
-DENIAL INFORMATION:
-- Denial Reason: {pa_status.denial_reason}
-- Denial Category: {eval_result.denial_category.value}
-- Decision Details: {pa_status.decision_details}
-
-SERVICE DETAILS:
-- CPT Codes: {', '.join(service_info.cpt_codes)}
-- Diagnosis Codes: {', '.join(service_info.dx_codes)}
-- Site of Service: {service_info.site_of_service}
-
-CLINICAL CONTEXT:
-- Primary Diagnosis: {clinical_context.primary_diagnosis}
-- Supporting Diagnoses: {', '.join(clinical_context.supporting_diagnoses) if clinical_context.supporting_diagnoses else 'N/A'}
-- Clinical Notes: {chr(10).join(clinical_context.clinical_notes) if clinical_context.clinical_notes else 'N/A'}
-- Prior Treatments: {clinical_context.prior_treatments if clinical_context.prior_treatments else 'N/A'}
-
-DENIAL EVALUATION FINDINGS:
-- Next Action: {eval_result.recommended_action.value}
-- Justification: {eval_result.justification}
-- Supporting Evidence: {chr(10).join(f'- {e}' for e in eval_result.supporting_evidence)}
-- Contradicting Evidence: {chr(10).join(f'- {e}' for e in eval_result.contradicting_evidence)}
-
-Generate:
-1. clinical_justification: A compelling clinical argument for medical necessity grounded to the data provided above (2-3 paragraphs)
-2. denial_rebuttal: Point-by-point response to the denial reason with counter-evidence based on denial evaluation justification and supporting evidence
-3. supporting_evidence_summary: Summary of clinical evidence supporting the request"""
-
-    # Use structured output to generate only the dynamic content
-    model = ChatOpenAI(model="gpt-4o-mini")
     structured_model = model.with_structured_output(AppealLetterContent)
-    appeal_content: AppealLetterContent = await structured_model.ainvoke(content_prompt)
+    appeal_content: AppealLetterContent = await structured_model.ainvoke([
+        SystemMessage(APPEAL_DRAFT_SYSTEM_PROMPT),
+        HumanMessage(user_prompt)
+    ])
     
     service_description = f"CPT: {', '.join(service_info.cpt_codes)} | DX: {', '.join(service_info.dx_codes)}"
     provider_addr = provider_info.address
@@ -355,12 +337,12 @@ Generate:
         denial_details={
             "denial_reason": pa_status.denial_reason,
             "decision_details": pa_status.decision_details,
-            "denial_category": eval_result.denial_category.value
+            "root_cause": denial_evaluation.root_cause
         },
-        appeal_type= eval_result.denial_category.value,
-        denial_category=eval_result.denial_category.value,
+        appeal_type=denial_evaluation.recommendation.value,
+        denial_category=denial_evaluation.root_cause,
         clinical_justification=appeal_content.clinical_justification,
-        supporting_evidence=eval_result.supporting_evidence,
+        supporting_evidence=[e.fact for e in denial_evaluation.evidences],
         medical_literature=[],
         draft_letter=draft_letter,
         required_approvals=["clinician", "medical_director"],
@@ -376,8 +358,8 @@ Generate:
         description=f"Please review the drafted appeal letter for PA denial. Denial reason: {pa_status.denial_reason}",
         context_data={
             "appeal": appeal.model_dump(),
-            "required_documents": eval_result.required_documentation,
-            "next_steps": eval_result.required_next_steps
+            "required_documents": denial_evaluation.required_documentation,
+            "appeal_strength_score": denial_evaluation.appeal_strength_score
         },
         assigned_to=clinician_id,
     )
@@ -455,8 +437,8 @@ async def validate_requirements(state: PAAgentState):
         ## make an entry to database
 
 async def upload_require_documents(state:PAAgentState):
-    requirement_result: List[RequireItemResult] = state["requirement_result"]
-    pa_submission_id: str = state["submission_id"]
+    requirement_result: List[RequireItemResult] = state.get("requirement_result")
+    pa_submission_id: str = state.get("submission_id")
 
     documents: List[UploadDocument] = []
     for item in requirement_result:
@@ -509,14 +491,14 @@ def router_after_tracking(state: PAAgentState) -> Literal["approve", "denial", "
     return END
 
 def route_after_denial(state: PAAgentState) -> Literal["appeal", "revise", "human_intervention", END]:
-    if state["awaiting_clinician_input"]:
+    if state.get("awaiting_clinician_input", False):
         return "human_intervention"
     
     denial_evaluation: DenialEvaluationResult = state.get("denial_evaluation")
-    print(f"### denial evaluation result -> {denial_evaluation.evaluation_result.recommended_action}")
-    if denial_evaluation.evaluation_result.recommended_action == RecommendedAction.APPEAL:
+    print(f"### denial evaluation result -> {denial_evaluation.recommendation}")
+    if denial_evaluation.recommendation == RecommendedAction.APPEAL:
         return "appeal"
-    elif denial_evaluation.evaluation_result.recommended_action == RecommendedAction.REVISE_AND_RESUBMIT:
+    elif denial_evaluation.recommendation == RecommendedAction.REVISE_AND_RESUBMIT:
         return "revise"
     else:
         return END
