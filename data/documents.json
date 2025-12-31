@@ -1,0 +1,246 @@
+{
+    "documents": {
+        "DOC-PAT003-001": {
+            "document_id": "DOC-PAT003-001",
+            "patient_id": "PAT003",
+            "title": "Primary Care Visit Note - Low Back Pain Initial",
+            "document_type": "clinical_note",
+            "document_path": "/documents/PAT003/clinical_notes/visit_20240905.pdf",
+            "created_at": "2024-09-05T10:30:00Z",
+            "is_final": true,
+            "tags": [
+                "low back pain",
+                "initial visit",
+                "conservative treatment",
+                "physical examination",
+                "neurological exam",
+                "medical necessity"
+            ],
+            "summary": "Patient presents with low back pain x 2 weeks after lifting. Physical exam with neurological assessment. Started NSAIDs and muscle relaxants. PT referral placed.",
+            "content": "CHIEF COMPLAINT: Low back pain x 2 weeks\n\nHPI: 58 y/o male presents with low back pain that started 2 weeks ago after lifting heavy boxes during a move. Pain is located in the lower lumbar region, rated 6/10, worse with bending and prolonged sitting. No radiation to legs at this time. No bowel/bladder dysfunction. No fever or weight loss.\n\nPHYSICAL EXAM:\n- Lumbar spine: Tenderness to palpation L4-S1 paraspinal muscles bilaterally\n- ROM: Flexion limited to 60 degrees due to pain\n- Neurological: Strength 5/5 bilateral lower extremities, sensation intact, DTRs 2+ and symmetric\n- Straight leg raise: Negative bilaterally\n\nASSESSMENT: Acute low back pain, likely musculoskeletal strain\n\nPLAN:\n1. Naproxen 500mg BID with food\n2. Cyclobenzaprine 10mg QHS\n3. Physical therapy referral - 2-3x/week for 6 weeks\n4. Activity modification, avoid heavy lifting\n5. Return in 6 weeks or sooner if symptoms worsen"
+        },
+        "DOC-PAT003-002": {
+            "document_id": "DOC-PAT003-002",
+            "patient_id": "PAT003",
+            "title": "Physical Therapy Evaluation",
+            "document_type": "clinical_note",
+            "document_path": "/documents/PAT003/pt_notes/eval_20240910.pdf",
+            "created_at": "2024-09-10T14:00:00Z",
+            "is_final": true,
+            "tags": [
+                "physical therapy",
+                "evaluation",
+                "low back pain"
+            ],
+            "summary": "PT initial evaluation for low back pain. Treatment plan established for 12 sessions.",
+            "content": "PHYSICAL THERAPY INITIAL EVALUATION\n\nDIAGNOSIS: Low back pain\n\nSUBJECTIVE: Patient reports low back pain 6/10, worse with sitting >30 min and bending forward. Difficulty with ADLs including dressing and household chores.\n\nOBJECTIVE:\n- Posture: Increased lumbar lordosis, forward head posture\n- ROM: Lumbar flexion 50%, extension 60%, lateral flexion 70% bilaterally\n- Strength: Core weakness noted, hip flexors tight bilaterally\n- Special tests: SLR negative, prone instability test positive\n\nASSESSMENT: Patient presents with mechanical low back pain with core instability. Good rehab potential.\n\nPLAN: 12 sessions over 6 weeks\n- Core stabilization exercises\n- McKenzie protocol\n- Manual therapy\n- Patient education on body mechanics"
+        },
+        "DOC-PAT003-003": {
+            "document_id": "DOC-PAT003-003",
+            "patient_id": "PAT003",
+            "title": "Physical Therapy Discharge Summary",
+            "document_type": "clinical_note",
+            "document_path": "/documents/PAT003/pt_notes/discharge_20241101.pdf",
+            "created_at": "2024-11-01T16:00:00Z",
+            "is_final": true,
+            "tags": [
+                "physical therapy",
+                "discharge",
+                "conservative treatment failure",
+                "treatment failure",
+                "radicular symptoms",
+                "medical necessity"
+            ],
+            "summary": "PT discharge after 12 sessions documenting conservative treatment failure. Partial improvement but persistent radicular symptoms. Recommend physician follow-up.",
+            "content": "PHYSICAL THERAPY DISCHARGE SUMMARY\n\nPATIENT: Robert Thompson\nDATES OF SERVICE: 09/10/2024 - 10/25/2024\nTOTAL SESSIONS: 12\n\nINITIAL PRESENTATION: Low back pain 6/10, limited ROM, core weakness\n\nTREATMENT PROVIDED:\n- Core stabilization program\n- McKenzie extension exercises\n- Manual therapy including soft tissue mobilization\n- Patient education on posture and body mechanics\n- Home exercise program instruction\n\nPROGRESS:\n- Pain improved from 6/10 to 5/10 (20% improvement)\n- Lumbar ROM improved 15%\n- Core strength improved\n- NEW: Patient developed radiating pain to left leg during treatment course\n\nDISCHARGE STATUS:\n- Partial improvement in mechanical symptoms\n- Persistent and worsening radicular symptoms\n- Patient reports numbness in left calf\n\nRECOMMENDATIONS:\n- Continue home exercise program\n- Follow-up with physician for evaluation of new radicular symptoms\n- May benefit from imaging to rule out disc pathology"
+        },
+        "DOC-PAT003-004": {
+            "document_id": "DOC-PAT003-004",
+            "patient_id": "PAT003",
+            "title": "Primary Care Follow-up - Radiculopathy",
+            "document_type": "clinical_note",
+            "document_path": "/documents/PAT003/clinical_notes/visit_20241015.pdf",
+            "created_at": "2024-10-15T11:00:00Z",
+            "is_final": true,
+            "tags": [
+                "radiculopathy",
+                "neurological symptoms",
+                "neurological exam",
+                "physical examination",
+                "MRI order",
+                "medical necessity",
+                "clinical notes"
+            ],
+            "summary": "Follow-up visit with full neurological examination documenting new radicular symptoms, positive neurological findings including motor weakness and sensory deficits, and MRI order with medical necessity statement.",
+            "content": "FOLLOW-UP VISIT NOTE\n\nCHIEF COMPLAINT: Worsening back pain with new leg symptoms\n\nHPI: Patient returns after 6 weeks of conservative treatment including PT (12 sessions), NSAIDs, and muscle relaxants. Reports initial improvement in back pain but now has new symptoms:\n- Radiating pain from low back down left leg to calf\n- Numbness on top of left foot\n- Symptoms worse with sitting and forward bending\n- Pain rated 7/10\n\nPHYSICAL EXAM:\n- Lumbar spine: Tenderness L4-L5 region\n- Neurological:\n  * Left L5 dermatomal numbness\n  * Left EHL strength 4/5 (weakness)\n  * Left ankle reflex diminished\n  * Positive straight leg raise left at 45 degrees\n  * Negative contralateral SLR\n\nASSESSMENT:\n1. Low back pain with left L5 radiculopathy\n2. Suspected lumbar disc herniation\n\nPLAN:\n1. Add Gabapentin 300mg TID for neuropathic pain\n2. Order MRI lumbar spine without contrast to evaluate for disc herniation\n3. Continue current medications\n4. Activity modification\n5. Return after MRI for results and treatment planning\n\nMEDICAL NECESSITY FOR MRI:\nPatient has failed 6+ weeks of conservative therapy including physical therapy, NSAIDs, and muscle relaxants. Now presents with new neurological deficits including dermatomal numbness, motor weakness, and positive straight leg raise consistent with lumbar radiculopathy. MRI is indicated to evaluate for disc herniation or other structural pathology causing nerve root compression."
+        },
+        "DOC-PAT003-005": {
+            "document_id": "DOC-PAT003-005",
+            "patient_id": "PAT003",
+            "title": "Letter of Medical Necessity - MRI Lumbar Spine",
+            "document_type": "letter_of_medical_necessity",
+            "document_path": "/documents/PAT003/letters/lmn_mri_20241015.pdf",
+            "created_at": "2024-10-15T15:00:00Z",
+            "is_final": true,
+            "tags": [
+                "medical necessity",
+                "MRI",
+                "lumbar spine",
+                "clinical notes",
+                "neurological deficits",
+                "conservative treatment failure"
+            ],
+            "summary": "Letter of medical necessity supporting MRI lumbar spine request documenting failed conservative treatment and neurological deficits.",
+            "content": "LETTER OF MEDICAL NECESSITY\n\nDate: October 15, 2024\n\nRE: MRI Lumbar Spine Without Contrast\nPatient: Robert Thompson\nDOB: 05/12/1965\nMember ID: MEM456789123\n\nTo Whom It May Concern:\n\nI am writing to request prior authorization for MRI of the lumbar spine for my patient, Robert Thompson.\n\nCLINICAL HISTORY:\nMr. Thompson is a 58-year-old male with low back pain that began in September 2024. He has completed a comprehensive course of conservative treatment including:\n\n1. Physical Therapy: 12 sessions over 6 weeks (09/10/2024 - 10/25/2024)\n2. NSAIDs: Naproxen 500mg BID x 6 weeks\n3. Muscle Relaxants: Cyclobenzaprine 10mg QHS x 6 weeks\n\nDespite this treatment, the patient has developed new and concerning symptoms:\n- Radiating pain from lumbar spine to left lower extremity\n- Numbness in L5 dermatomal distribution\n- Motor weakness (EHL 4/5)\n- Positive straight leg raise test\n\nMEDICAL NECESSITY:\nMRI is medically necessary to:\n1. Evaluate for lumbar disc herniation causing nerve root compression\n2. Rule out other structural pathology (spinal stenosis, tumor, infection)\n3. Guide treatment planning (conservative vs. interventional vs. surgical)\n\nThe patient meets criteria for imaging based on:\n- Failed conservative treatment > 6 weeks\n- New neurological deficits\n- Progressive symptoms despite treatment\n\nPlease contact our office with any questions.\n\nSincerely,\n\nDr. Emily Davis, MD\nNorthwest Primary Care\nNPI: 5566778899\nPhone: 206-555-4000"
+        },
+        "DOC-PAT004-001": {
+            "document_id": "DOC-PAT004-001",
+            "patient_id": "PAT004",
+            "title": "Rheumatology Consultation - RA Management",
+            "document_type": "clinical_note",
+            "document_path": "/documents/PAT004/clinical_notes/rheum_20240815.pdf",
+            "created_at": "2024-08-15T09:00:00Z",
+            "is_final": true,
+            "tags": [
+                "rheumatoid arthritis",
+                "biologic",
+                "methotrexate failure"
+            ],
+            "summary": "Rheumatology visit documenting inadequate response to methotrexate and discussion of biologic therapy.",
+            "content": "RHEUMATOLOGY CONSULTATION NOTE\n\nPATIENT: Jennifer Martinez\nDOB: 11/28/1982\nDATE: 08/15/2024\n\nCHIEF COMPLAINT: Follow-up for rheumatoid arthritis\n\nHPI: 41 y/o female with seropositive RA diagnosed in 2022. Currently on methotrexate 15mg weekly x 2+ years. Despite dose optimization, patient continues to have moderate disease activity with:\n- Morning stiffness > 1 hour daily\n- Joint pain and swelling in hands, wrists, and knees\n- Fatigue affecting daily activities\n- Unable to open jars, difficulty with fine motor tasks\n\nCURRENT MEDICATIONS:\n- Methotrexate 15mg PO weekly (since 04/2022)\n- Folic acid 1mg daily\n- Prednisone 5mg daily (added 08/2024 for flare)\n\nPAST RA TREATMENTS:\n- Hydroxychloroquine 200mg BID (04/2022 - 06/2023): Discontinued due to retinal concerns and inadequate efficacy\n- Methotrexate: Titrated from 7.5mg to 15mg weekly, on stable dose x 18 months\n\nPHYSICAL EXAM:\n- Hands: Synovitis MCP 2-4 bilaterally, PIP swelling\n- Wrists: Bilateral tenderness and limited ROM\n- Knees: Small effusions bilaterally\n- Swollen joint count: 6\n- Tender joint count: 8\n\nLABS (08/01/2024):\n- RF: 156 IU/mL (elevated)\n- Anti-CCP: 245 U/mL (elevated)\n- CRP: 2.8 mg/dL (elevated)\n- ESR: 42 mm/hr (elevated)\n- CBC, CMP: Within normal limits\n\nDISEASE ACTIVITY: DAS28-CRP = 4.2 (Moderate disease activity)\n\nASSESSMENT:\nSeropositive rheumatoid arthritis with moderate disease activity despite adequate trial of conventional DMARD therapy (methotrexate x 2+ years).\n\nPLAN:\n1. Patient is candidate for biologic DMARD therapy\n2. Discussed options: TNF inhibitors, IL-6 inhibitors, JAK inhibitors\n3. Patient prefers adalimumab (Humira) - self-injection every 2 weeks\n4. Will submit prior authorization request\n5. Continue methotrexate as combination therapy\n6. Taper prednisone once biologic initiated\n7. TB screening, Hepatitis B/C screening before starting biologic"
+        },
+        "DOC-PAT004-002": {
+            "document_id": "DOC-PAT004-002",
+            "patient_id": "PAT004",
+            "title": "Lab Results - RA Panel",
+            "document_type": "lab_result",
+            "document_path": "/documents/PAT004/labs/ra_panel_20241001.pdf",
+            "created_at": "2024-10-01T08:00:00Z",
+            "is_final": true,
+            "tags": [
+                "lab results",
+                "rheumatoid factor",
+                "inflammatory markers"
+            ],
+            "summary": "Lab results showing elevated inflammatory markers and positive RA serologies.",
+            "content": "LABORATORY RESULTS\n\nPatient: Jennifer Martinez\nDOB: 11/28/1982\nCollection Date: 10/01/2024\n\nRHEUMATOID PANEL:\nRheumatoid Factor: 156 IU/mL (Reference: <14) - HIGH\nAnti-CCP Antibody: 245 U/mL (Reference: <20) - HIGH\n\nINFLAMMATORY MARKERS:\nC-Reactive Protein (CRP): 2.8 mg/dL (Reference: <0.5) - HIGH\nErythrocyte Sedimentation Rate (ESR): 42 mm/hr (Reference: <20) - HIGH\n\nCOMPLETE BLOOD COUNT:\nWBC: 7.2 x10^9/L (Reference: 4.5-11.0) - NORMAL\nHemoglobin: 12.8 g/dL (Reference: 12.0-16.0) - NORMAL\nPlatelets: 285 x10^9/L (Reference: 150-400) - NORMAL\n\nCOMPREHENSIVE METABOLIC PANEL:\nCreatinine: 0.9 mg/dL - NORMAL\nALT: 28 U/L - NORMAL\nAST: 25 U/L - NORMAL\n\nHEPATITIS SCREENING:\nHepatitis B Surface Antigen: Negative\nHepatitis B Core Antibody: Negative\nHepatitis C Antibody: Negative\n\nTUBERCULOSIS SCREENING:\nQuantiFERON-TB Gold: Negative"
+        },
+        "DOC-PAT004-003": {
+            "document_id": "DOC-PAT004-003",
+            "patient_id": "PAT004",
+            "title": "Rheumatology Follow-up - Biologic Request",
+            "document_type": "clinical_note",
+            "document_path": "/documents/PAT004/clinical_notes/rheum_20241001.pdf",
+            "created_at": "2024-10-01T10:00:00Z",
+            "is_final": true,
+            "tags": [
+                "rheumatoid arthritis",
+                "biologic",
+                "prior authorization"
+            ],
+            "summary": "Follow-up documenting continued disease activity and formal biologic therapy request.",
+            "content": "RHEUMATOLOGY FOLLOW-UP NOTE\n\nPATIENT: Jennifer Martinez\nDATE: 10/01/2024\n\nSUBJECTIVE:\nPatient returns for RA follow-up. Despite adding low-dose prednisone, continues to have:\n- Morning stiffness 90 minutes\n- Joint pain 6/10\n- Difficulty with work (administrative assistant) due to hand symptoms\n- Fatigue affecting quality of life\n\nOBJECTIVE:\n- Swollen joint count: 6 (MCP 2,3,4 bilateral)\n- Tender joint count: 8\n- Patient global assessment: 6/10\n- DAS28-CRP: 4.2 (moderate activity)\n\nLABS TODAY: See separate lab report\n- RF 156, Anti-CCP 245 (both elevated)\n- CRP 2.8, ESR 42 (elevated inflammatory markers)\n- TB and Hepatitis screening negative\n\nASSESSMENT:\nRheumatoid arthritis, seropositive, with moderate disease activity despite:\n1. Methotrexate 15mg weekly x 30 months\n2. Prior hydroxychloroquine trial (failed)\n3. Current low-dose prednisone\n\nPatient meets criteria for biologic therapy per ACR guidelines:\n- Failed adequate trial of conventional DMARD\n- Moderate-high disease activity (DAS28 > 3.2)\n- Positive prognostic factors (RF+, Anti-CCP+, elevated inflammatory markers)\n\nPLAN:\n1. Submit PA for adalimumab (Humira) 40mg SC every 2 weeks\n2. Continue methotrexate 15mg weekly\n3. Continue folic acid\n4. Taper prednisone after biologic approval\n5. Patient education on biologic therapy, injection technique\n6. Follow-up 4 weeks after starting biologic"
+        },
+        "DOC-PAT005-001": {
+            "document_id": "DOC-PAT005-001",
+            "patient_id": "PAT005",
+            "title": "MRI Lumbar Spine Report",
+            "document_type": "imaging_report",
+            "document_path": "/documents/PAT005/imaging/mri_lumbar_20240815.pdf",
+            "created_at": "2024-08-15T14:00:00Z",
+            "is_final": true,
+            "tags": [
+                "MRI",
+                "lumbar spine",
+                "disc herniation",
+                "imaging",
+                "previous imaging"
+            ],
+            "summary": "MRI showing L4-L5 disc herniation with nerve root compression. Previous imaging for comparison.",
+            "content": "MRI LUMBAR SPINE WITHOUT CONTRAST\n\nPatient: Michael Anderson\nDOB: 07/04/1970\nDate of Study: 08/15/2024\n\nCLINICAL INDICATION: Low back pain with radiculopathy\n\nTECHNIQUE: Multiplanar, multisequence MRI of the lumbar spine without contrast.\n\nFINDINGS:\n\nL3-L4: Mild disc bulge without significant neural foraminal narrowing. No central stenosis.\n\nL4-L5: Moderate-sized left paracentral disc herniation measuring approximately 8mm, causing mass effect on the left L5 nerve root. Moderate left neural foraminal narrowing. Mild central canal stenosis.\n\nL5-S1: Mild disc bulge with mild bilateral neural foraminal narrowing. No significant central stenosis.\n\nConus medullaris terminates at L1 level, normal in signal.\n\nNo evidence of infection, tumor, or fracture.\n\nIMPRESSION:\n1. L4-L5 left paracentral disc herniation with left L5 nerve root compression\n2. Mild degenerative changes at L3-L4 and L5-S1\n\nCorrelation with clinical symptoms recommended."
+        },
+        "DOC-PAT005-002": {
+            "document_id": "DOC-PAT005-002",
+            "patient_id": "PAT005",
+            "title": "Spine Consultation Note",
+            "document_type": "clinical_note",
+            "document_path": "/documents/PAT005/clinical_notes/spine_20240815.pdf",
+            "created_at": "2024-08-15T16:00:00Z",
+            "is_final": true,
+            "tags": [
+                "spine",
+                "consultation",
+                "disc herniation",
+                "clinical notes",
+                "medical necessity",
+                "conservative treatment",
+                "physical examination",
+                "neurological exam"
+            ],
+            "summary": "Orthopedic spine consultation documenting failed conservative treatment and recommending epidural steroid injection. Full neurological examination documented.",
+            "content": "ORTHOPEDIC SPINE CONSULTATION\n\nPatient: Michael Anderson\nDate: 08/15/2024\n\nREFERRAL REASON: Low back pain with left leg radiculopathy\n\nHPI: 54 y/o male with 2 months of low back pain and left leg pain. Failed conservative treatment with PT and medications. MRI today shows L4-L5 disc herniation.\n\nCONSERVATIVE TREATMENT HISTORY:\n- Physical therapy: 8 sessions over 6 weeks (06/15/2024 - 07/30/2024)\n- NSAIDs: Meloxicam 15mg daily x 10 weeks\n- Activity modification and home exercises\n\nMRI REVIEW: L4-L5 left paracentral disc herniation with L5 nerve root compression, correlates with clinical presentation.\n\nPHYSICAL EXAM:\n- Antalgic gait\n- Positive left SLR at 40 degrees\n- Left L5 dermatomal numbness\n- Left EHL 4+/5\n\nASSESSMENT: L4-L5 disc herniation with left L5 radiculopathy\n\nPLAN:\n1. Recommend left L4-L5 transforaminal epidural steroid injection\n2. Continue gabapentin\n3. Activity modification\n4. Re-evaluate in 6 weeks\n5. If no improvement, consider surgical consultation"
+        },
+        "DOC-PAT005-003": {
+            "document_id": "DOC-PAT005-003",
+            "patient_id": "PAT005",
+            "title": "Pain Management Follow-up",
+            "document_type": "clinical_note",
+            "document_path": "/documents/PAT005/clinical_notes/pain_20241020.pdf",
+            "created_at": "2024-10-20T11:00:00Z",
+            "is_final": true,
+            "tags": [
+                "pain management",
+                "epidural",
+                "follow-up",
+                "clinical notes",
+                "medical necessity",
+                "clinical change",
+                "symptom recurrence",
+                "neurological exam"
+            ],
+            "summary": "Follow-up after epidural injection documenting clinical change - initial 60% improvement followed by symptom recurrence. Medical necessity for repeat imaging established.",
+            "content": "PAIN MANAGEMENT FOLLOW-UP\n\nPatient: Michael Anderson\nDate: 10/20/2024\n\nPROCEDURE HISTORY: Left L4-L5 transforaminal epidural steroid injection on 09/15/2024\n\nSUBJECTIVE:\nPatient reports initial 60% improvement in leg pain for approximately 4 weeks following injection. Over the past 2 weeks, symptoms have gradually returned:\n- Left leg pain now 6/10 (was 3/10 at best)\n- Numbness in left foot persists\n- Back pain 5/10\n- Difficulty with prolonged standing and walking\n\nOBJECTIVE:\n- Gait: Mildly antalgic\n- SLR: Positive left at 50 degrees (improved from 40)\n- Strength: Left EHL 4/5\n- Sensation: Decreased left L5 dermatome\n\nASSESSMENT:\nL4-L5 disc herniation with recurrent left L5 radiculopathy. Partial response to epidural injection with symptom recurrence.\n\nMEDICAL NECESSITY FOR REPEAT MRI:\nClinical change documented - patient had significant initial response to epidural injection (60% improvement) followed by symptom recurrence. This clinical trajectory suggests possible interval change in disc pathology. Repeat MRI is medically necessary to:\n1. Evaluate for disc re-herniation or progression\n2. Assess for new pathology explaining symptom recurrence\n3. Guide surgical decision-making\n\nPLAN:\n1. Options discussed:\n   a. Repeat epidural injection\n   b. Repeat MRI to evaluate for interval change\n   c. Surgical consultation\n2. Patient prefers repeat MRI before deciding on next steps\n3. Requesting PA for repeat MRI lumbar spine\n4. Continue current medications\n5. Follow-up after imaging"
+        },
+
+        "DOC-PAT005-005": {
+            "document_id": "DOC-PAT005-005",
+            "patient_id": "PAT005",
+            "title": "Physical Therapy Discharge Summary",
+            "document_type": "clinical_note",
+            "document_path": "/documents/PAT005/pt_notes/discharge_20240730.pdf",
+            "created_at": "2024-07-30T16:00:00Z",
+            "is_final": true,
+            "tags": [
+                "physical therapy",
+                "discharge",
+                "conservative treatment",
+                "treatment failure",
+                "6 weeks",
+                "PT",
+                "NSAIDs"
+            ],
+            "summary": "Physical therapy discharge summary documenting 8 sessions over 6 weeks of conservative treatment with minimal improvement. Patient failed conservative therapy.",
+            "content": "PHYSICAL THERAPY DISCHARGE SUMMARY\n\nPATIENT: Michael Anderson\nDOB: 07/04/1970\nDATES OF SERVICE: 06/15/2024 - 07/30/2024\nTOTAL SESSIONS: 8 sessions over 6 weeks\n\nREFERRING PHYSICIAN: Dr. Emily Davis, MD\nDIAGNOSIS: Low back pain with left lower extremity radiculopathy (M54.5, M54.16)\n\nINITIAL PRESENTATION:\n- Low back pain 7/10\n- Left leg pain radiating to calf 6/10\n- Limited lumbar ROM\n- Positive straight leg raise left at 35 degrees\n\nCONSERVATIVE TREATMENT PROVIDED:\n1. Physical Therapy (8 sessions, 06/15/2024 - 07/30/2024):\n   - Core stabilization exercises\n   - McKenzie extension protocol\n   - Neural mobilization techniques\n   - Lumbar traction\n   - Patient education on posture and body mechanics\n   - Home exercise program\n\n2. Concurrent Medications (per physician):\n   - Meloxicam 15mg daily (NSAID) - started 06/05/2024\n   - Activity modification\n\nPROGRESS:\n- Back pain: 7/10 → 5/10 (29% improvement)\n- Leg pain: 6/10 → 5/10 (17% improvement)\n- Lumbar ROM: Improved 20%\n- SLR: Improved from 35 to 45 degrees\n- Functional status: Minimal improvement in ADLs\n\nDISCHARGE STATUS:\n- Patient has completed 6+ weeks of conservative treatment\n- Partial improvement in mechanical symptoms\n- Persistent radicular symptoms despite treatment\n- Patient continues to have functional limitations\n\nRECOMMENDATIONS:\n- Continue home exercise program\n- Follow-up with referring physician for further evaluation\n- May benefit from advanced imaging to evaluate structural pathology\n- Consider interventional pain management if symptoms persist\n\nPT Signature: Mark Johnson, PT, DPT\nDate: 07/30/2024"
+        },
+        "DOC-PAT005-006": {
+            "document_id": "DOC-PAT005-006",
+            "patient_id": "PAT005",
+            "title": "Primary Care Visit - Initial Low Back Pain",
+            "document_type": "clinical_note",
+            "document_path": "/documents/PAT005/clinical_notes/visit_20240605.pdf",
+            "created_at": "2024-06-05T10:00:00Z",
+            "is_final": true,
+            "tags": [
+                "low back pain",
+                "initial visit",
+                "conservative treatment",
+                "NSAIDs",
+                "physical therapy referral",
+                "clinical notes",
+                "medical necessity"
+            ],
+            "summary": "Initial visit for low back pain. Started conservative treatment with NSAIDs and physical therapy referral. Documents start of 6-week conservative treatment period.",
+            "content": "PRIMARY CARE VISIT NOTE\n\nPatient: Michael Anderson\nDate: 06/05/2024\n\nCHIEF COMPLAINT: New onset low back pain x 1 week\n\nHPI: 54 y/o male presents with low back pain that started approximately 1 week ago. Pain is located in the lower lumbar region, rated 7/10, worse with bending and prolonged sitting. Patient reports some radiating discomfort to left buttock and posterior thigh. No bowel/bladder dysfunction. No fever, weight loss, or night pain.\n\nPAST MEDICAL HISTORY:\n- Hypertension (controlled)\n- Hyperlipidemia\n\nPHYSICAL EXAM:\n- Lumbar spine: Tenderness to palpation L4-L5 paraspinal muscles\n- ROM: Flexion limited to 50% due to pain\n- Neurological: Strength 5/5 bilateral lower extremities, sensation intact\n- Straight leg raise: Equivocal left at 60 degrees\n- Gait: Mildly antalgic\n\nASSESSMENT:\n1. Acute low back pain with possible early radiculopathy\n2. Lumbar strain\n\nPLAN - CONSERVATIVE TREATMENT INITIATED:\n1. Meloxicam 15mg daily (NSAID) - start today, continue for minimum 6 weeks\n2. Physical therapy referral - 2-3x/week for 6 weeks\n3. Activity modification - avoid heavy lifting, prolonged sitting\n4. Ice/heat as needed\n5. Return in 6-8 weeks for re-evaluation\n6. If symptoms worsen or new neurological symptoms develop, return sooner\n\nPatient educated on conservative treatment plan and importance of completing full course of PT.\n\nDr. Emily Davis, MD\nNorthwest Primary Care"
+        }
+    }
+}

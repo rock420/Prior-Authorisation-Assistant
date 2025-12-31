@@ -1,0 +1,183 @@
+{
+    "BCBS001": {
+        "payer_id": "BCBS001",
+        "payer_name": "Blue Cross Blue Shield",
+        "payer_address": "PO Box 12345\nSeattle, WA 98101",
+        "appeals_address": "Appeals Department\nPO Box 12346\nSeattle, WA 98101",
+        "appeals_fax": "1-800-555-0124",
+        "plans": {
+            "PLAN001": {
+                "plan_id": "PLAN001",
+                "plan_name": "Standard PPO",
+                "plan_type": "PPO",
+                "members": {
+                    "PAT001": {
+                        "member_id": "MEM123456789",
+                        "effective_date": "2024-01-01",
+                        "termination_date": null,
+                        "eligibility_status": "active",
+                        "coverage_type": "individual",
+                        "copay": {
+                            "primary_care": 25,
+                            "specialist": 50,
+                            "emergency": 150,
+                            "imaging": 100
+                        },
+                        "deductible": {
+                            "individual": 1500,
+                            "family": 3000,
+                            "met_amount": 850
+                        },
+                        "out_of_pocket_max": {
+                            "individual": 6000,
+                            "family": 12000,
+                            "met_amount": 2100
+                        }
+                    },
+                    "PAT003": {
+                        "member_id": "MEM456789123",
+                        "effective_date": "2024-01-01",
+                        "termination_date": null,
+                        "eligibility_status": "active",
+                        "coverage_type": "family",
+                        "copay": {
+                            "primary_care": 25,
+                            "specialist": 50,
+                            "emergency": 150,
+                            "imaging": 100
+                        },
+                        "deductible": {
+                            "individual": 1500,
+                            "family": 3000,
+                            "met_amount": 1200
+                        },
+                        "out_of_pocket_max": {
+                            "individual": 6000,
+                            "family": 12000,
+                            "met_amount": 3500
+                        }
+                    },
+                    "PAT005": {
+                        "member_id": "MEM321654987",
+                        "effective_date": "2023-01-01",
+                        "termination_date": null,
+                        "eligibility_status": "active",
+                        "coverage_type": "individual",
+                        "copay": {
+                            "primary_care": 25,
+                            "specialist": 50,
+                            "emergency": 150,
+                            "imaging": 100
+                        },
+                        "deductible": {
+                            "individual": 1500,
+                            "family": 3000,
+                            "met_amount": 1500
+                        },
+                        "out_of_pocket_max": {
+                            "individual": 6000,
+                            "family": 12000,
+                            "met_amount": 4200
+                        },
+                        "prior_auth_history": [
+                            {
+                                "pa_id": "PA-MRI-001",
+                                "service": "MRI Lumbar Spine",
+                                "date": "2024-08-05",
+                                "status": "approved",
+                                "auth_number": "AUTH789456"
+                            },
+                            {
+                                "pa_id": "PA-INJ-001",
+                                "service": "Epidural Steroid Injection",
+                                "date": "2024-08-25",
+                                "status": "approved",
+                                "auth_number": "AUTH789457"
+                            },
+                            {
+                                "pa_id": "PA-MRI-002",
+                                "service": "MRI Lumbar Spine (Repeat)",
+                                "date": "2024-10-30",
+                                "status": "denied",
+                                "denial_reason": "Medical necessity not established"
+                            }
+                        ]
+                    }
+                }
+            },
+            "PLAN002": {
+                "plan_id": "PLAN002",
+                "plan_name": "Premium HMO",
+                "plan_type": "HMO",
+                "members": {
+                    "PAT002": {
+                        "member_id": "MEM987654321",
+                        "effective_date": "2023-06-01",
+                        "termination_date": null,
+                        "eligibility_status": "active",
+                        "coverage_type": "family",
+                        "copay": {
+                            "primary_care": 15,
+                            "specialist": 30,
+                            "emergency": 100,
+                            "imaging": 75
+                        },
+                        "deductible": {
+                            "individual": 500,
+                            "family": 1000,
+                            "met_amount": 500
+                        },
+                        "out_of_pocket_max": {
+                            "individual": 3000,
+                            "family": 6000,
+                            "met_amount": 1200
+                        }
+                    },
+                    "PAT004": {
+                        "member_id": "MEM789123456",
+                        "effective_date": "2022-01-01",
+                        "termination_date": null,
+                        "eligibility_status": "active",
+                        "coverage_type": "individual",
+                        "copay": {
+                            "primary_care": 15,
+                            "specialist": 30,
+                            "emergency": 100,
+                            "specialty_drug": 100
+                        },
+                        "deductible": {
+                            "individual": 500,
+                            "family": 1000,
+                            "met_amount": 500
+                        },
+                        "out_of_pocket_max": {
+                            "individual": 3000,
+                            "family": 6000,
+                            "met_amount": 2800
+                        },
+                        "specialty_pharmacy_benefits": {
+                            "tier": "specialty",
+                            "coinsurance_percent": 20,
+                            "max_copay": 250,
+                            "step_therapy_required": true
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "AETNA001": {
+        "payer_id": "AETNA001",
+        "payer_name": "Aetna",
+        "payer_address": "PO Box 98765\nHartford, CT 06101",
+        "appeals_address": "Appeals Department\nPO Box 98766\nHartford, CT 06101",
+        "plans": {
+            "PLAN003": {
+                "plan_id": "PLAN003",
+                "plan_name": "Choice POS II",
+                "plan_type": "POS",
+                "members": {}
+            }
+        }
+    }
+}

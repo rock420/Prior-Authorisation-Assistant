@@ -1,0 +1,314 @@
+{
+    "rules": [
+        {
+            "rule_id": "CARDIAC_PCI",
+            "payer_ids": [
+                "BCBS001",
+                "AETNA001"
+            ],
+            "cpt_codes": [
+                "92920",
+                "92921",
+                "92924",
+                "92925",
+                "92928",
+                "92929"
+            ],
+            "dx_codes": [
+                "I21.0",
+                "I21.1",
+                "I21.2",
+                "I21.3",
+                "I21.4"
+            ],
+            "sites_of_service": [
+                "Outpatient Hospital",
+                "Inpatient Hospital",
+                "Ambulatory Surgical Center"
+            ],
+            "pa_required": true,
+            "required_documents": [
+                "Clinical notes documenting medical necessity",
+                "ECG/EKG results",
+                "Cardiac catheterization report",
+                "Lab results including troponin levels",
+                "Documentation of conservative treatment attempts if applicable"
+            ],
+            "turnaround_time_hours": 72,
+            "notes": "Emergent cases may be exempt from PA requirement"
+        },
+        {
+            "rule_id": "KNEE_REPLACEMENT",
+            "payer_ids": [
+                "BCBS001",
+                "AETNA001"
+            ],
+            "cpt_codes": [
+                "27447",
+                "27446"
+            ],
+            "dx_codes": [
+                "M17.0",
+                "M17.10",
+                "M17.11",
+                "M17.12"
+            ],
+            "sites_of_service": [
+                "Inpatient Hospital",
+                "Ambulatory Surgical Center"
+            ],
+            "pa_required": true,
+            "required_documents": [
+                "Clinical notes documenting medical necessity",
+                "X-ray or MRI imaging results",
+                "Documentation of failed conservative treatments (PT, injections, medications)",
+                "Functional assessment scores",
+                "BMI documentation if applicable"
+            ],
+            "turnaround_time_hours": 120,
+            "notes": "Minimum 6 weeks of conservative treatment required before approval"
+        },
+        {
+            "rule_id": "MRI_LUMBAR_SPINE",
+            "payer_ids": [
+                "BCBS001",
+                "AETNA001"
+            ],
+            "cpt_codes": [
+                "72148",
+                "72149",
+                "72158"
+            ],
+            "dx_codes": [
+                "M54.5",
+                "M54.16",
+                "M54.17",
+                "M51.16",
+                "M51.17",
+                "G89.29"
+            ],
+            "sites_of_service": [
+                "Outpatient Hospital",
+                "Independent Diagnostic Testing Facility",
+                "Office"
+            ],
+            "pa_required": true,
+            "required_documents": [
+                "Clinical notes documenting medical necessity",
+                "Documentation of conservative treatment (minimum 6 weeks PT, NSAIDs, or muscle relaxants)",
+                "Previous imaging results if available"
+            ],
+            "medical_necessity_criteria": [
+                "Failed conservative treatment for at least 6 weeks",
+                "Documented neurological deficits (weakness, numbness, reflex changes)",
+                "Red flag symptoms (cauda equina, progressive deficit, suspected malignancy)",
+                "Pre-surgical planning when surgery indicated"
+            ],
+            "turnaround_time_hours": 48,
+            "notes": "PA not required for emergency or inpatient MRI. Repeat MRI within 12 months requires documented clinical change."
+        },
+        {
+            "rule_id": "MRI_OUTPATIENT_GENERAL",
+            "payer_ids": [
+                "BCBS001"
+            ],
+            "cpt_codes": [
+                "70551",
+                "70552",
+                "70553",
+                "72141",
+                "72142",
+                "72146",
+                "72147"
+            ],
+            "dx_codes": [],
+            "sites_of_service": [
+                "Outpatient Hospital",
+                "Independent Diagnostic Testing Facility"
+            ],
+            "pa_required": true,
+            "required_documents": [
+                "Clinical notes documenting medical necessity",
+                "Relevant prior imaging results if available",
+                "Physical examination findings"
+            ],
+            "turnaround_time_hours": 48,
+            "notes": "PA not required for emergency or inpatient MRI"
+        },
+        {
+            "rule_id": "ROUTINE_LABS",
+            "payer_ids": [
+                "BCBS001",
+                "AETNA001"
+            ],
+            "cpt_codes": [
+                "80053",
+                "80061",
+                "85025",
+                "84443"
+            ],
+            "dx_codes": [],
+            "sites_of_service": [
+                "Office",
+                "Independent Laboratory",
+                "Outpatient Hospital"
+            ],
+            "pa_required": false,
+            "required_documents": [],
+            "turnaround_time_hours": 0,
+            "notes": "Routine laboratory services do not require prior authorization"
+        },
+        {
+            "rule_id": "BIOLOGIC_TNF_INHIBITORS",
+            "payer_ids": [
+                "BCBS001",
+                "AETNA001"
+            ],
+            "cpt_codes": [
+                "J0129",
+                "J0135",
+                "J1745",
+                "J3590"
+            ],
+            "hcpcs_codes": [
+                "J0129",
+                "J0135",
+                "J1745"
+            ],
+            "drug_names": [
+                "adalimumab",
+                "Humira",
+                "infliximab",
+                "Remicade",
+                "etanercept",
+                "Enbrel"
+            ],
+            "dx_codes": [
+                "M05.79",
+                "M06.09",
+                "M05.70",
+                "M06.00",
+                "L40.50",
+                "K50.90",
+                "K50.00"
+            ],
+            "sites_of_service": [
+                "Office",
+                "Outpatient Hospital",
+                "Home Infusion",
+                "Home Self-Administration"
+            ],
+            "pa_required": true,
+            "step_therapy_required": true,
+            "step_therapy_requirements": [
+                "Trial and failure of methotrexate for minimum 3 months at adequate dose (15-25mg/week)",
+                "OR documented contraindication/intolerance to methotrexate",
+                "For RA: Trial of at least one conventional DMARD"
+            ],
+            "required_documents": [
+                "Clinical notes documenting diagnosis and disease activity",
+                "Documentation of failed first-line DMARD therapy with dates and doses",
+                "Relevant lab results (RF, Anti-CCP, CRP, ESR for RA)",
+                "Disease activity score (DAS28 for RA)",
+                "TB screening results (QuantiFERON or PPD)",
+                "Hepatitis B and C screening",
+                "Treatment plan and expected duration",
+                "Provider attestation form"
+            ],
+            "medical_necessity_criteria": [
+                "Confirmed diagnosis of approved indication (RA, PsA, AS, Crohn's, UC, Psoriasis)",
+                "Moderate to severe disease activity despite conventional therapy",
+                "Failed adequate trial of first-line therapy (step therapy)",
+                "No contraindications to biologic therapy"
+            ],
+            "turnaround_time_hours": 72,
+            "notes": "Step therapy requirements must be met. Peer-to-peer available for urgent cases."
+        },
+        {
+            "rule_id": "SPECIALTY_DRUGS_GENERAL",
+            "payer_ids": [
+                "BCBS001",
+                "AETNA001"
+            ],
+            "cpt_codes": [
+                "J0178",
+                "J2357",
+                "J9999"
+            ],
+            "dx_codes": [
+                "M05.79",
+                "M06.09",
+                "L40.50",
+                "K50.90"
+            ],
+            "sites_of_service": [
+                "Office",
+                "Outpatient Hospital",
+                "Home Infusion"
+            ],
+            "pa_required": true,
+            "required_documents": [
+                "Clinical notes documenting diagnosis and medical necessity",
+                "Documentation of failed first-line therapies",
+                "Relevant lab results",
+                "Treatment plan and expected duration",
+                "Provider attestation form"
+            ],
+            "turnaround_time_hours": 72,
+            "notes": "Step therapy requirements may apply"
+        },
+        {
+            "rule_id": "EPIDURAL_STEROID_INJECTION",
+            "payer_ids": [
+                "BCBS001",
+                "AETNA001"
+            ],
+            "cpt_codes": [
+                "62320",
+                "62321",
+                "62322",
+                "62323"
+            ],
+            "dx_codes": [
+                "M54.5",
+                "M54.16",
+                "M54.17",
+                "M51.16",
+                "M51.17"
+            ],
+            "sites_of_service": [
+                "Outpatient Hospital",
+                "Ambulatory Surgical Center",
+                "Office"
+            ],
+            "pa_required": true,
+            "required_documents": [
+                "Clinical notes documenting radicular symptoms",
+                "MRI or CT imaging showing pathology",
+                "Documentation of failed conservative treatment",
+                "Physical examination with neurological findings"
+            ],
+            "turnaround_time_hours": 72,
+            "notes": "Maximum 3 injections per spinal region per year"
+        }
+    ],
+    "default_response": {
+        "pa_required": false,
+        "required_documents": [],
+        "notes": "Service does not match any PA requirement rules"
+    },
+    "denial_reasons": {
+        "D101": "Service not covered under plan benefits",
+        "D102": "Medical necessity not established",
+        "D103": "Insufficient clinical documentation",
+        "D104": "Step therapy requirements not met",
+        "D105": "Alternative treatment options not exhausted",
+        "D106": "Experimental or investigational treatment",
+        "D201": "Duplicate service within coverage period",
+        "D202": "Provider not in network",
+        "D203": "Service exceeds benefit limits",
+        "D301": "Missing required documentation",
+        "D302": "Documentation does not support diagnosis",
+        "D303": "Clinical criteria not met"
+    }
+}

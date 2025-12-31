@@ -1,0 +1,65 @@
+{
+    "policies": {
+        "MRI_LUMBAR_SPINE": {
+            "policy_id": "POL-MRI-LUMBAR-001",
+            "payer_id": "BCBS001",
+            "service": "MRI Lumbar Spine",
+            "cpt_codes": [
+                "72148",
+                "72149",
+                "72158"
+            ],
+            "effective_date": "2024-01-01",
+            "sections": {
+                "medical_necessity": {
+                    "title": "Medical Necessity Criteria",
+                    "content": "MRI of the lumbar spine is considered medically necessary when ANY of the following criteria are met:\n\n1. Conservative treatment failure for at least 6 weeks including:\n   - Physical therapy (minimum 6 sessions)\n   - NSAIDs or muscle relaxants\n   - Activity modification\n\n2. Documented neurological deficits including:\n   - Motor weakness in specific myotomal distribution\n   - Sensory changes in dermatomal pattern\n   - Reflex changes (diminished or absent)\n   - Positive straight leg raise test\n\n3. Red flag symptoms present:\n   - Cauda equina syndrome (bowel/bladder dysfunction)\n   - Progressive neurological deficit\n   - Suspected malignancy (unexplained weight loss, history of cancer)\n   - Suspected infection (fever, IV drug use)\n   - Suspected fracture (trauma, osteoporosis)\n\n4. Pre-surgical planning when surgery is indicated based on clinical findings"
+                },
+                "documentation_requirements": {
+                    "title": "Required Documentation",
+                    "content": "The following documentation must be submitted with the PA request:\n\n1. Clinical notes documenting:\n   - Duration and nature of symptoms\n   - Response to conservative treatment\n\n2. Physical therapy records (if applicable):\n   - Number of sessions completed\n   - Treatment provided\n   - Outcome/response to treatment\n\n3. Previous imaging results (if available):\n   - X-ray reports\n   - Prior MRI/CT reports\n\n4. Medication history:\n   - List of medications tried\n   - Duration of each medication trial\n   - Response/side effects"
+                },
+                "exclusions": {
+                    "title": "Exclusions and Limitations",
+                    "content": "MRI lumbar spine will NOT be approved in the following circumstances:\n\n1. Routine screening without clinical indication\n2. Non-specific low back pain < 6 weeks duration without red flags\n3. Duplicate imaging within 12 months without documented clinical change\n4. Patient has not attempted conservative management\n5. Request for surveillance imaging without new symptoms"
+                },
+                "repeat_imaging": {
+                    "title": "Repeat Imaging Criteria",
+                    "content": "Repeat MRI within 12 months of prior study requires documentation of:\n\n1. New or significantly worsening neurological deficits\n2. New red flag symptoms\n3. Post-surgical evaluation\n4. New trauma\n5. Significant clinical change not explained by prior imaging\n6. Pre-operative planning for scheduled surgery"
+                }
+            }
+        },
+        "BIOLOGIC_TNF_INHIBITORS": {
+            "policy_id": "POL-BIO-TNF-001",
+            "payer_id": "BCBS001",
+            "service": "TNF Inhibitor Biologics",
+            "drug_names": [
+                "adalimumab",
+                "Humira",
+                "infliximab",
+                "Remicade",
+                "etanercept",
+                "Enbrel"
+            ],
+            "effective_date": "2024-01-01",
+            "sections": {
+                "covered_indications": {
+                    "title": "Covered Indications",
+                    "content": "TNF inhibitor therapy is covered for the following FDA-approved indications:\n\n1. Rheumatoid Arthritis (RA)\n2. Psoriatic Arthritis (PsA)\n3. Ankylosing Spondylitis (AS)\n4. Crohn's Disease\n5. Ulcerative Colitis\n6. Plaque Psoriasis (moderate to severe)\n7. Juvenile Idiopathic Arthritis"
+                },
+                "step_therapy": {
+                    "title": "Step Therapy Requirements",
+                    "content": "Prior to approval of TNF inhibitor therapy, the following step therapy requirements must be met:\n\nFor Rheumatoid Arthritis:\n1. Trial and failure of methotrexate for minimum 3 months at adequate dose (15-25mg/week)\n   OR documented contraindication/intolerance to methotrexate\n2. Documented moderate to severe disease activity (DAS28 > 3.2)\n\nFor Psoriatic Arthritis:\n1. Trial and failure of at least one conventional DMARD (methotrexate, sulfasalazine, or leflunomide)\n   for minimum 3 months\n   OR documented contraindication/intolerance\n\nFor Inflammatory Bowel Disease:\n1. Trial and failure of conventional therapy (corticosteroids, aminosalicylates, immunomodulators)\n   OR documented contraindication/intolerance"
+                },
+                "documentation_requirements": {
+                    "title": "Required Documentation",
+                    "content": "The following documentation must be submitted:\n\n1. Confirmed diagnosis with supporting documentation\n2. Disease activity assessment:\n   - For RA: DAS28 score, swollen/tender joint counts\n   - For IBD: Disease activity index, endoscopy reports\n   - For Psoriasis: PASI score, BSA involvement\n\n3. Step therapy documentation:\n   - Medication name, dose, duration\n   - Reason for discontinuation (failure, intolerance, contraindication)\n   - Dates of treatment\n\n4. Laboratory results:\n   - For RA: RF, Anti-CCP, CRP, ESR\n   - CBC, CMP, LFTs\n\n5. Screening tests:\n   - TB screening (QuantiFERON or PPD)\n   - Hepatitis B and C screening\n\n6. Provider attestation form"
+                },
+                "failure_criteria": {
+                    "title": "Definition of Treatment Failure",
+                    "content": "Treatment failure is defined as:\n\n1. Inadequate response: Persistent moderate to severe disease activity despite adequate trial\n2. Intolerance: Documented adverse effects requiring discontinuation\n3. Contraindication: Medical condition precluding use of medication\n\nAdequate trial is defined as:\n- Minimum 3 months of therapy\n- At therapeutic dose\n- With documented compliance"
+                }
+            }
+        }
+    }
+}

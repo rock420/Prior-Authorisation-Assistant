@@ -1,0 +1,92 @@
+{
+    "PROV001": {
+        "provider_id": "PROV001",
+        "npi": "5566778899",
+        "name": "Dr. Emily Davis",
+        "organization": "Northwest Primary Care",
+        "phone": "2065554000",
+        "fax": "2065554001",
+        "email": "edavis@nwprimarycare.com",
+        "address": {
+            "street": "100 Family Medicine Lane",
+            "city": "Seattle",
+            "state": "WA",
+            "zip_code": "98103"
+        },
+        "license_number": "MD44556",
+        "specialty": "Family Medicine",
+        "taxonomy_code": "207Q00000X"
+    },
+    "PROV002": {
+        "provider_id": "PROV002",
+        "npi": "1122334455",
+        "name": "Dr. Amanda Chen",
+        "organization": "Pacific Rheumatology Associates",
+        "phone": "4255556000",
+        "fax": "4255556001",
+        "email": "achen@pacificrheum.com",
+        "address": {
+            "street": "200 Specialty Center Drive",
+            "city": "Bellevue",
+            "state": "WA",
+            "zip_code": "98004"
+        },
+        "license_number": "MD55667",
+        "specialty": "Rheumatology",
+        "taxonomy_code": "207RR0500X"
+    },
+    "PROV003": {
+        "provider_id": "PROV003",
+        "npi": "9988776655",
+        "name": "Dr. Robert Williams",
+        "organization": "Northwest Orthopedics",
+        "phone": "5035557000",
+        "fax": "5035557001",
+        "email": "rwilliams@nwortho.com",
+        "address": {
+            "street": "300 Bone & Joint Way",
+            "city": "Portland",
+            "state": "OR",
+            "zip_code": "97201"
+        },
+        "license_number": "MD66778",
+        "specialty": "Orthopedic Surgery",
+        "taxonomy_code": "207X00000X"
+    },
+    "PROV004": {
+        "provider_id": "PROV004",
+        "npi": "4455667788",
+        "name": "Dr. James Wilson",
+        "organization": "Puget Sound Spine Center",
+        "phone": "2535558000",
+        "fax": "2535558001",
+        "email": "jwilson@psspine.com",
+        "address": {
+            "street": "400 Spine Health Boulevard",
+            "city": "Tacoma",
+            "state": "WA",
+            "zip_code": "98402"
+        },
+        "license_number": "MD77889",
+        "specialty": "Orthopedic Spine Surgery",
+        "taxonomy_code": "207XS0114X"
+    },
+    "PROV005": {
+        "provider_id": "PROV005",
+        "npi": "6677889900",
+        "name": "Dr. Lisa Park",
+        "organization": "Northwest Pain Management",
+        "phone": "2535559000",
+        "fax": "2535559001",
+        "email": "lpark@nwpain.com",
+        "address": {
+            "street": "500 Pain Relief Center",
+            "city": "Tacoma",
+            "state": "WA",
+            "zip_code": "98402"
+        },
+        "license_number": "MD88990",
+        "specialty": "Pain Medicine",
+        "taxonomy_code": "208VP0014X"
+    }
+}

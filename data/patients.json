@@ -1,0 +1,516 @@
+{
+    "PAT001": {
+        "patient_id": "PAT001",
+        "demographics": {
+            "first_name": "John",
+            "last_name": "Smith",
+            "date_of_birth": "1958-03-15",
+            "gender": "Male",
+            "address": {
+                "street": "123 Main Street",
+                "city": "Seattle",
+                "state": "WA",
+                "zip": "98101"
+            },
+            "phone": "2065551234",
+            "email": "john.smith@email.com"
+        },
+        "coverage": {
+            "payer_id": "BCBS001",
+            "plan_id": "PLAN001",
+            "member_id": "MEM123456789"
+        },
+        "primary_provider_id": "PROV001",
+        "problem_list": [
+            {
+                "code": "I21.0",
+                "description": "Acute transmural myocardial infarction of anterior wall",
+                "onset_date": "2024-11-15",
+                "status": "active"
+            },
+            {
+                "code": "I10",
+                "description": "Essential hypertension",
+                "onset_date": "2018-06-20",
+                "status": "active"
+            },
+            {
+                "code": "E11.9",
+                "description": "Type 2 diabetes mellitus without complications",
+                "onset_date": "2019-02-10",
+                "status": "active"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Metoprolol",
+                "dose": "50mg",
+                "frequency": "twice daily",
+                "start_date": "2024-11-16"
+            },
+            {
+                "name": "Lisinopril",
+                "dose": "10mg",
+                "frequency": "once daily",
+                "start_date": "2018-06-25"
+            },
+            {
+                "name": "Metformin",
+                "dose": "500mg",
+                "frequency": "twice daily",
+                "start_date": "2019-02-15"
+            },
+            {
+                "name": "Aspirin",
+                "dose": "81mg",
+                "frequency": "once daily",
+                "start_date": "2024-11-16"
+            }
+        ],
+        "recent_visits": [
+            {
+                "date": "2024-11-15",
+                "type": "Emergency",
+                "provider": "Dr. Sarah Johnson",
+                "summary": "Patient presented with chest pain radiating to left arm. ECG showed ST elevation in leads V1-V4. Troponin elevated. Diagnosed with STEMI. Emergency PCI performed."
+            },
+            {
+                "date": "2024-11-20",
+                "type": "Cardiology Follow-up",
+                "provider": "Dr. Michael Chen",
+                "summary": "Post-MI follow-up. Patient stable. Ejection fraction 45%. Recommend cardiac rehabilitation and continued medical management."
+            }
+        ]
+    },
+    "PAT002": {
+        "patient_id": "PAT002",
+        "demographics": {
+            "first_name": "Maria",
+            "last_name": "Garcia",
+            "date_of_birth": "1975-08-22",
+            "gender": "Female",
+            "address": {
+                "street": "456 Oak Avenue",
+                "city": "Portland",
+                "state": "OR",
+                "zip": "97201"
+            },
+            "phone": "5035559876",
+            "email": "maria.garcia@email.com"
+        },
+        "coverage": {
+            "payer_id": "BCBS001",
+            "plan_id": "PLAN002",
+            "member_id": "MEM987654321"
+        },
+        "primary_provider_id": "PROV003",
+        "problem_list": [
+            {
+                "code": "M17.11",
+                "description": "Primary osteoarthritis, right knee",
+                "onset_date": "2022-04-10",
+                "status": "active"
+            },
+            {
+                "code": "E78.0",
+                "description": "Pure hypercholesterolemia",
+                "onset_date": "2020-01-15",
+                "status": "active"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Atorvastatin",
+                "dose": "20mg",
+                "frequency": "once daily",
+                "start_date": "2020-01-20"
+            },
+            {
+                "name": "Ibuprofen",
+                "dose": "400mg",
+                "frequency": "as needed",
+                "start_date": "2022-04-15"
+            }
+        ],
+        "recent_visits": [
+            {
+                "date": "2024-10-05",
+                "type": "Orthopedic Consultation",
+                "provider": "Dr. Robert Williams",
+                "summary": "Progressive right knee pain despite conservative treatment. X-ray shows bone-on-bone changes. Patient is candidate for total knee replacement."
+            }
+        ]
+    },
+    "PAT003": {
+        "patient_id": "PAT003",
+        "demographics": {
+            "first_name": "Robert",
+            "last_name": "Thompson",
+            "date_of_birth": "1965-05-12",
+            "gender": "Male",
+            "address": {
+                "street": "789 Pine Street",
+                "city": "Seattle",
+                "state": "WA",
+                "zip": "98105"
+            },
+            "phone": "2065557890",
+            "email": "robert.thompson@email.com"
+        },
+        "coverage": {
+            "payer_id": "BCBS001",
+            "plan_id": "PLAN001",
+            "member_id": "MEM456789123"
+        },
+        "primary_provider_id": "PROV001",
+        "problem_list": [
+            {
+                "code": "M54.5",
+                "description": "Low back pain",
+                "onset_date": "2024-09-01",
+                "status": "active"
+            },
+            {
+                "code": "M54.16",
+                "description": "Radiculopathy, lumbar region",
+                "onset_date": "2024-10-15",
+                "status": "active"
+            },
+            {
+                "code": "G89.29",
+                "description": "Other chronic pain",
+                "onset_date": "2024-09-01",
+                "status": "active"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Naproxen",
+                "dose": "500mg",
+                "frequency": "twice daily",
+                "start_date": "2024-09-05"
+            },
+            {
+                "name": "Cyclobenzaprine",
+                "dose": "10mg",
+                "frequency": "at bedtime",
+                "start_date": "2024-09-05"
+            },
+            {
+                "name": "Gabapentin",
+                "dose": "300mg",
+                "frequency": "three times daily",
+                "start_date": "2024-10-20"
+            }
+        ],
+        "recent_visits": [
+            {
+                "date": "2024-09-05",
+                "type": "Primary Care",
+                "provider": "Dr. Emily Davis",
+                "summary": "Patient presents with low back pain x 2 weeks after lifting heavy boxes. No radicular symptoms at this time. Started on NSAIDs and muscle relaxants. Referred to physical therapy."
+            },
+            {
+                "date": "2024-10-15",
+                "type": "Primary Care Follow-up",
+                "provider": "Dr. Emily Davis",
+                "summary": "Patient returns with worsening symptoms. Now reports radiating pain down left leg to calf, numbness in L5 distribution. Positive straight leg raise on left. Completed 6 weeks of PT with minimal improvement. Adding gabapentin for neuropathic pain. Ordering MRI lumbar spine to evaluate for disc herniation."
+            },
+            {
+                "date": "2024-11-01",
+                "type": "Physical Therapy Discharge",
+                "provider": "PT Sarah Miller",
+                "summary": "Patient completed 12 sessions of physical therapy over 6 weeks. Exercises included core strengthening, McKenzie protocol, and lumbar stabilization. Patient reports 20% improvement in pain but persistent radicular symptoms. Recommend continued home exercise program and follow-up with physician for further evaluation."
+            }
+        ],
+        "conservative_therapy_history": [
+            {
+                "therapy_type": "Physical Therapy",
+                "start_date": "2024-09-10",
+                "end_date": "2024-10-25",
+                "sessions_completed": 12,
+                "outcome": "Partial improvement - 20% reduction in pain, persistent radicular symptoms",
+                "provider": "PT Sarah Miller"
+            },
+            {
+                "therapy_type": "NSAIDs",
+                "medication": "Naproxen 500mg BID",
+                "start_date": "2024-09-05",
+                "duration_weeks": 8,
+                "outcome": "Minimal relief of symptoms"
+            },
+            {
+                "therapy_type": "Muscle Relaxants",
+                "medication": "Cyclobenzaprine 10mg QHS",
+                "start_date": "2024-09-05",
+                "duration_weeks": 8,
+                "outcome": "Improved sleep, minimal effect on daytime symptoms"
+            }
+        ]
+    },
+    "PAT004": {
+        "patient_id": "PAT004",
+        "demographics": {
+            "first_name": "Jennifer",
+            "last_name": "Martinez",
+            "date_of_birth": "1982-11-28",
+            "gender": "Female",
+            "address": {
+                "street": "321 Cedar Lane",
+                "city": "Bellevue",
+                "state": "WA",
+                "zip": "98004"
+            },
+            "phone": "4255553456",
+            "email": "jennifer.martinez@email.com"
+        },
+        "coverage": {
+            "payer_id": "BCBS001",
+            "plan_id": "PLAN002",
+            "member_id": "MEM789123456"
+        },
+        "primary_provider_id": "PROV002",
+        "problem_list": [
+            {
+                "code": "M05.79",
+                "description": "Rheumatoid arthritis with rheumatoid factor, multiple sites",
+                "onset_date": "2022-03-15",
+                "status": "active"
+            },
+            {
+                "code": "M06.09",
+                "description": "Rheumatoid arthritis without rheumatoid factor, multiple sites",
+                "onset_date": "2022-03-15",
+                "status": "active"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Methotrexate",
+                "dose": "15mg",
+                "frequency": "once weekly",
+                "start_date": "2022-04-01",
+                "status": "active"
+            },
+            {
+                "name": "Folic Acid",
+                "dose": "1mg",
+                "frequency": "once daily",
+                "start_date": "2022-04-01",
+                "status": "active"
+            },
+            {
+                "name": "Prednisone",
+                "dose": "5mg",
+                "frequency": "once daily",
+                "start_date": "2024-08-01",
+                "status": "active"
+            }
+        ],
+        "recent_visits": [
+            {
+                "date": "2024-08-15",
+                "type": "Rheumatology",
+                "provider": "Dr. Amanda Chen",
+                "summary": "Patient with RA on methotrexate x 2 years. Disease activity remains moderate despite dose optimization. DAS28 score 4.2. Discussed biologic therapy options. Patient interested in adalimumab (Humira). Will submit PA request."
+            },
+            {
+                "date": "2024-10-01",
+                "type": "Rheumatology Follow-up",
+                "provider": "Dr. Amanda Chen",
+                "summary": "Follow-up for RA. Patient continues to have active disease despite methotrexate 15mg weekly for 2+ years. Morning stiffness >1 hour, swollen joint count 6, tender joint count 8. Labs show elevated CRP 2.8, ESR 42. Requesting biologic therapy - adalimumab."
+            }
+        ],
+        "failed_therapies": [
+            {
+                "medication": "Methotrexate",
+                "dose": "15mg weekly",
+                "start_date": "2022-04-01",
+                "duration_months": 30,
+                "reason_for_failure": "Inadequate response - persistent moderate disease activity",
+                "documented_by": "Dr. Amanda Chen"
+            },
+            {
+                "medication": "Hydroxychloroquine",
+                "dose": "200mg BID",
+                "start_date": "2022-04-01",
+                "end_date": "2023-06-01",
+                "duration_months": 14,
+                "reason_for_failure": "Discontinued due to retinal toxicity concerns, inadequate efficacy",
+                "documented_by": "Dr. Amanda Chen"
+            }
+        ],
+        "lab_results": [
+            {
+                "test": "Rheumatoid Factor",
+                "value": "156",
+                "unit": "IU/mL",
+                "reference_range": "<14",
+                "date": "2024-10-01",
+                "status": "abnormal"
+            },
+            {
+                "test": "Anti-CCP Antibody",
+                "value": "245",
+                "unit": "U/mL",
+                "reference_range": "<20",
+                "date": "2024-10-01",
+                "status": "abnormal"
+            },
+            {
+                "test": "CRP",
+                "value": "2.8",
+                "unit": "mg/dL",
+                "reference_range": "<0.5",
+                "date": "2024-10-01",
+                "status": "abnormal"
+            },
+            {
+                "test": "ESR",
+                "value": "42",
+                "unit": "mm/hr",
+                "reference_range": "<20",
+                "date": "2024-10-01",
+                "status": "abnormal"
+            }
+        ]
+    },
+    "PAT005": {
+        "patient_id": "PAT005",
+        "demographics": {
+            "first_name": "Michael",
+            "last_name": "Anderson",
+            "date_of_birth": "1970-07-04",
+            "gender": "Male",
+            "address": {
+                "street": "555 Maple Drive",
+                "city": "Tacoma",
+                "state": "WA",
+                "zip": "98402"
+            },
+            "phone": "2535559012",
+            "email": "michael.anderson@email.com"
+        },
+        "coverage": {
+            "payer_id": "BCBS001",
+            "plan_id": "PLAN001",
+            "member_id": "MEM321654987"
+        },
+        "primary_provider_id": "PROV001",
+        "problem_list": [
+            {
+                "code": "M54.5",
+                "description": "Low back pain",
+                "onset_date": "2024-06-01",
+                "status": "active"
+            },
+            {
+                "code": "M51.16",
+                "description": "Intervertebral disc degeneration, lumbar region",
+                "onset_date": "2024-08-15",
+                "status": "active"
+            },
+            {
+                "code": "M54.16",
+                "description": "Radiculopathy, lumbar region",
+                "onset_date": "2024-08-15",
+                "status": "active"
+            }
+        ],
+        "medications": [
+            {
+                "name": "Meloxicam",
+                "dose": "15mg",
+                "frequency": "once daily",
+                "start_date": "2024-06-05"
+            },
+            {
+                "name": "Gabapentin",
+                "dose": "600mg",
+                "frequency": "three times daily",
+                "start_date": "2024-08-20"
+            }
+        ],
+        "recent_visits": [
+            {
+                "date": "2024-06-05",
+                "type": "Primary Care",
+                "provider": "Dr. Emily Davis",
+                "summary": "New onset low back pain. Started conservative management with NSAIDs. Referred to PT."
+            },
+            {
+                "date": "2024-08-15",
+                "type": "Orthopedic Spine Consultation",
+                "provider": "Dr. James Wilson",
+                "summary": "MRI shows L4-L5 disc herniation with nerve root compression. Recommending epidural steroid injection."
+            },
+            {
+                "date": "2024-10-20",
+                "type": "Pain Management",
+                "provider": "Dr. Lisa Park",
+                "summary": "Patient had lumbar epidural steroid injection on 9/15. Initial improvement but symptoms returning. Requesting repeat MRI to evaluate for surgical candidacy."
+            }
+        ],
+        "prior_pa_history": [
+            {
+                "pa_id": "PA-MRI-001",
+                "service": "MRI Lumbar Spine",
+                "cpt_code": "72148",
+                "request_date": "2024-08-01",
+                "decision_date": "2024-08-05",
+                "status": "approved",
+                "authorization_number": "AUTH789456"
+            },
+            {
+                "pa_id": "PA-INJ-001",
+                "service": "Lumbar Epidural Steroid Injection",
+                "cpt_code": "62322",
+                "request_date": "2024-08-20",
+                "decision_date": "2024-08-25",
+                "status": "approved",
+                "authorization_number": "AUTH789457"
+            },
+            {
+                "pa_id": "PA-MRI-002",
+                "service": "MRI Lumbar Spine",
+                "cpt_code": "72148",
+                "request_date": "2024-10-25",
+                "decision_date": "2024-10-30",
+                "status": "denied",
+                "denial_reason": "Medical necessity not established - duplicate imaging within 12 months without documented clinical change",
+                "denial_code": "D201"
+            }
+        ],
+        "conservative_therapy_history": [
+            {
+                "therapy_type": "Physical Therapy",
+                "start_date": "2024-06-15",
+                "end_date": "2024-07-30",
+                "sessions_completed": 8,
+                "outcome": "Minimal improvement - persistent radicular symptoms",
+                "provider": "PT Mark Johnson"
+            },
+            {
+                "therapy_type": "NSAIDs",
+                "medication": "Meloxicam 15mg daily",
+                "start_date": "2024-06-05",
+                "duration_weeks": 10,
+                "outcome": "Partial relief of back pain, no effect on leg symptoms"
+            },
+            {
+                "therapy_type": "Neuropathic Pain Medication",
+                "medication": "Gabapentin 600mg TID",
+                "start_date": "2024-08-20",
+                "duration_weeks": 8,
+                "outcome": "Moderate improvement in neuropathic symptoms"
+            },
+            {
+                "therapy_type": "Epidural Steroid Injection",
+                "procedure": "L4-L5 Transforaminal ESI",
+                "date": "2024-09-15",
+                "outcome": "Initial 60% improvement for 4 weeks, then symptom recurrence",
+                "provider": "Dr. Lisa Park"
+            }
+        ]
+    }
+}
