@@ -26,6 +26,12 @@ from ...tools import search_patient_documents, get_patient_health_record, get_pr
 from ...models.core import ServiceInfo, ClinicalContext
 
 
+# Console output helper
+def log_requirement(message: str) -> None:
+    """Print formatted status message for requirement gathering."""
+    print(f"   ├─ Requirement Gathering Agent: {message}")
+
+
 REQUIREMENT_HANDLER_TOOLS = [
     search_patient_documents,
     get_patient_health_record,
@@ -144,6 +150,7 @@ def create_gatherer_subgraph(llm: ChatOpenAI):
     async def gather_information_node(state: GathererState) -> dict:
         """Gatherer agent searches for information using tools."""
         parsed_require_item: ParsedRequireItem = state["parsed_require_item"]
+        log_requirement(f"Searching for: {parsed_require_item.original_request[:50]}...")
         
         system_prompt = GATHERER_SYSTEM_PROMPT.format(
             case_context=get_case_context(state),

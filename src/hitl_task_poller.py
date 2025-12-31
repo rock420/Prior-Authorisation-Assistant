@@ -15,8 +15,8 @@ from .models.hitl import HITLTask, TaskStatus, TaskType
 from .integrations.provider import check_hitl_task_status
 from .agent.requirement.state import RequireItemResult, RequireItemStatus, DocumentInfo
 
-logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+logger.setLevel(logging.WARNING)  # Suppress verbose polling logs
 
 
 class PollingState(str, Enum):

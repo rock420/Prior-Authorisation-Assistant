@@ -8,6 +8,15 @@ from .agent.state import PAIntake, PAAgentState
 from uuid import uuid4
 from datetime import datetime, timedelta, UTC
 import asyncio
+import logging
+
+# Suppress verbose logging from libraries
+logging.getLogger("httpx").setLevel(logging.WARNING)
+logging.getLogger("openai").setLevel(logging.WARNING)
+logging.getLogger("langchain").setLevel(logging.WARNING)
+logging.getLogger("langchain_core").setLevel(logging.WARNING)
+logging.getLogger("langgraph").setLevel(logging.WARNING)
+logging.getLogger("httpcore").setLevel(logging.WARNING)
 
 
 async def main(intake_id: str):
@@ -25,7 +34,6 @@ async def main(intake_id: str):
     await workflow.ainvoke(intake, config=config)
     
     # Keep running to let pollers work
-    print("\nPollers running. Press Ctrl+C to exit.")
     try:
         while True:
             await asyncio.sleep(1)

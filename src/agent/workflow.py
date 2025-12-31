@@ -31,14 +31,20 @@ from uuid import uuid4
 model = ChatOpenAI(model="gpt-4o-mini", timeout=20, max_retries=3)
 _memory: Optional[MemorySaver] = None
 
+# Console output helper
+def log_status(message: str, is_hitl: bool = False) -> None:
+    """Print formatted status message to console."""
+    prefix = "🔔 PA Agent:" if is_hitl else "🤖 PA Agent:"
+    print(f"{prefix} {message}")
+
 def get_memory() -> MemorySaver:
     global _memory
     if _memory is None:
-        print("creating Instance of MemorySaver")
         _memory = MemorySaver()
     return _memory
 
 async def intake_node(state: PAIntake) -> PAAgentState:
+    log_status(f"Processing intake for patient {state.patient_name}...")
     clinical_context = ClinicalContext(
         primary_diagnosis=state.primary_diagnosis,
         secondary_diagnoses=state.secondary_diagnoses,
@@ -47,6 +53,7 @@ async def intake_node(state: PAIntake) -> PAAgentState:
     )
 
     service_provider = get_provider_details(state.provider_id)
+    log_status("Intake complete. Starting coverage verification...")
 
     return PAAgentState(
         pa_request_id=state.pa_request_id,
@@ -62,6 +69,7 @@ async def intake_node(state: PAIntake) -> PAAgentState:
 
 
 async def determine_coverage(state: PAAgentState) -> PAAgentState:
+    log_status("Verifying patient coverage and eligibility...")
     patient_id: str =  state.get("patient_id")
     pa_request_id: str = state.get("pa_request_id")
     
@@ -81,6 +89,7 @@ async def determine_coverage(state: PAAgentState) -> PAAgentState:
     )
 
     if coverage is not None:
+        log_status(f"Coverage verified: {coverage.plan_details.get('plan_name')}")
         return {
             "payer_info" : PayerInfo(
                 payer_id=coverage.plan_details.get("payer_id"),
@@ -95,6 +104,7 @@ async def determine_coverage(state: PAAgentState) -> PAAgentState:
     return state
 
 async def pa_requirement_discovery(state: PAAgentState) -> PAAgentState:
+    log_status("Checking if prior authorization is required...")
     # Extract typed values from state dict
     payer_info: PayerInfo = state["payer_info"]
     service_info: ServiceInfo = state["service_info"]
@@ -128,6 +138,11 @@ async def pa_requirement_discovery(state: PAAgentState) -> PAAgentState:
             )
         )
 
+    if pa_requirement.required:
+        log_status(f"PA required. Found {len(require_items)} documentation requirements.")
+    else:
+        log_status("PA not required for this service.")
+
     return {
         "is_pa_required": pa_requirement.required,
         "require_items": require_items,
@@ -135,9 +150,11 @@ async def pa_requirement_discovery(state: PAAgentState) -> PAAgentState:
     }
 
 async def gather_pa_requirement(state: PAAgentState) -> PAAgentState:
+    require_items: List[RequireItem] = state.get("require_items")
+    log_status(f"Gathering {len(require_items)} required documents...")
+    
     pa_request_id: str = state.get("pa_request_id")
     patient_id: str = state.get("patient_id")
-    require_items: List[RequireItem] = state.get("require_items")
     service_info: ServiceInfo = state.get("service_info")
     clinical_context: ClinicalContext = state.get("clinical_context")
     payer_info: PayerInfo = state.get("payer_info")
@@ -153,13 +170,18 @@ async def gather_pa_requirement(state: PAAgentState) -> PAAgentState:
         clinical_context=clinical_context,
     )
 
+    found_count = sum(1 for r in requirement_result if r.status == RequireItemStatus.FOUND)
+    log_status(f"Document gathering complete. Found {found_count}/{len(require_items)} requirements.")
+
     return {"requirement_result": requirement_result, "workflow_status": PAWorkFlowStatus.REQUIREMENT_COLLECTION}
  
 async def submission(state: PAAgentState) -> PAAgentState:
     """
     Submit the PA request to the payer.
     Builds PARequest from state and calls submit_pa.
-    """    
+    """
+    log_status("Submitting PA request to payer...")
+    
     # Extract data from state
     pa_request_id: str = state.get("pa_request_id")
     patient_id: str = state["patient_id"]
@@ -191,6 +213,7 @@ async def submission(state: PAAgentState) -> PAAgentState:
     result = submit_pa(pa_request)
     
     if result.success:
+        log_status(f"Submission successful! ID: {result.submission_id}")
         return {
             "submission_id": result.submission_id,
             "submission_timestamp": result.submission_timestamp,
@@ -198,6 +221,7 @@ async def submission(state: PAAgentState) -> PAAgentState:
         }
     else:
         # Submission failed - create HITL task for retry
+        log_status(f"Submission failed: {result.error_message}", is_hitl=True)
         clinician_id: str = state.get("clinician_id", "unknown")
         hitl_task = HITLTask(
             task_id="HITL-" + str(uuid4()),
@@ -225,17 +249,19 @@ async def tracking_node(state: PAAgentState) -> PAAgentState:
         track_submission(pa_request_id, pa_submission_id)
         NodeInterrupt("PA status is still in pending")
     
+    log_status(f"Decision received: {status.status.value.upper()}")
     #Todo: save the status in PA_Status table
 
     return { "status": status}
 
 async def approved_node(state: PAAgentState) -> PAAgentState:
-
+    log_status("PA APPROVED! Authorization complete.")
     #notify approval
     return {"workflow_status": PAWorkFlowStatus.RESOLUTION}
 
 async def denial_node(state: PAAgentState) -> PAAgentState:
     pa_status: PAStatusResponse = state.get("status")
+    log_status(f"Analyzing denial reason: {pa_status.denial_reason}")
     payer_info: PayerInfo = state.get("payer_info")
 
     result : DenialEvaluationResult = await evaluate_denial(
@@ -251,6 +277,7 @@ async def denial_node(state: PAAgentState) -> PAAgentState:
 
     if result.confidence_score<0.7:
         ##agent not able to conclude, create HITL task
+        log_status("Need Human review: Unable to determine best action for this denial.", is_hitl=True)
         pa_request_id: str = state.get("pa_request_id")
         clinician_id: str = state.get("clinician_id")
         hitl_task = HITLTask(
@@ -268,9 +295,11 @@ async def denial_node(state: PAAgentState) -> PAAgentState:
             "pending_hitl_task": hitl_task
         }
     
+    log_status(f"Denial analysis complete. Recommendation: {result.recommendation.value.upper()}")
     return { "denial_evaluation": result, "workflow_status": PAWorkFlowStatus.DENIAL_EVALUATION}
 
 async def revise_node(state: PAAgentState) -> PAAgentState:
+    log_status("Preparing revised submission with additional documentation...")
     return {"workflow_status": PAWorkFlowStatus.REVISE}
 
 async def appeal_node(state: PAAgentState) -> PAAgentState:
@@ -278,6 +307,7 @@ async def appeal_node(state: PAAgentState) -> PAAgentState:
     Check appeal readiness and draft an appeal letter using LLM with template.
     Creates Appeal object and HITL task for clinician approval.
     """
+    log_status("Drafting appeal letter...")
     from ..models.core import Appeal
     from ..models.appeal import AppealLetterContent, build_appeal_letter
     
@@ -365,6 +395,8 @@ async def appeal_node(state: PAAgentState) -> PAAgentState:
     )
     create_task_for_staff(hitl_task.task_type, hitl_task)
     
+    log_status(f"Need Human review: Appeal letter drafted (strength score: {denial_evaluation.appeal_strength_score}/100). Please review and approve.", is_hitl=True)
+    
     return {
         "workflow_status": PAWorkFlowStatus.APPEAL,
         "awaiting_clinician_input": True,
@@ -375,6 +407,7 @@ async def appeal_node(state: PAAgentState) -> PAAgentState:
 
 async def rfi_node(state: PAAgentState) -> PAAgentState:
     pa_status: PAStatusResponse = state.get("status")
+    log_status(f"Payer requested additional information ({len(pa_status.rfi_details)} items)...")
 
     requirement_id: str = "REQUIREMENT-"+str(uuid4())
     require_items = []
@@ -392,6 +425,7 @@ async def rfi_node(state: PAAgentState) -> PAAgentState:
 
 
 async def validate_requirements(state: PAAgentState):
+    log_status("Validating gathered requirements...")
     requirement_result: List[RequireItemResult] = state["requirement_result"]
 
     #Todo: consider verdicts
@@ -429,6 +463,10 @@ async def validate_requirements(state: PAAgentState):
         )
         create_task_for_staff(hitl_task.task_type, hitl_task)
 
+        log_status(f"Need Human review: Missing {len(item_requires_hitl)} required document(s). Please provide.", is_hitl=True)
+        for item in item_requires_hitl:
+            log_status(f"  → {item.original_request}", is_hitl=True)
+
         return {
             "awaiting_clinician_input": True,
             "pending_hitl_task": hitl_task,
@@ -437,6 +475,7 @@ async def validate_requirements(state: PAAgentState):
         ## make an entry to database
 
 async def upload_require_documents(state:PAAgentState):
+    log_status("Uploading supporting documents to payer...")
     requirement_result: List[RequireItemResult] = state.get("requirement_result")
     pa_submission_id: str = state.get("submission_id")
 
@@ -450,6 +489,7 @@ async def upload_require_documents(state:PAAgentState):
     
     upload_documents(submission_id=pa_submission_id, documents=documents)
 
+    log_status(f"Uploaded {len(documents)} document(s).")
     return {"requirement_result":[], "require_items":[], "workflow_status": PAWorkFlowStatus.UPLOAD_REQUIREMENTS}
 
 async def human_intervention(state: PAAgentState) -> PAAgentState:
@@ -495,12 +535,12 @@ def route_after_denial(state: PAAgentState) -> Literal["appeal", "revise", "huma
         return "human_intervention"
     
     denial_evaluation: DenialEvaluationResult = state.get("denial_evaluation")
-    print(f"### denial evaluation result -> {denial_evaluation.recommendation}")
     if denial_evaluation.recommendation == RecommendedAction.APPEAL:
         return "appeal"
     elif denial_evaluation.recommendation == RecommendedAction.REVISE_AND_RESUBMIT:
         return "revise"
     else:
+        log_status("Final denial. No viable path to approval.")
         return END
 
 

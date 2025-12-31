@@ -14,8 +14,8 @@ from enum import Enum
 from .models.integration import PAStatus, PAStatusResponse
 from .integrations.payer_service import check_pa_status
 
-logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+logger.setLevel(logging.WARNING)  # Suppress verbose polling logs
 
 
 class PollingState(str, Enum):

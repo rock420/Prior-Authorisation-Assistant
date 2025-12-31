@@ -16,7 +16,7 @@ class AuditLogger:
     def __init__(self, logger_name: str = "pa_healthcare_agent.audit"):
         """Initialize the audit logger."""
         self.logger = logging.getLogger(logger_name)
-        self.logger.setLevel(logging.INFO)
+        self.logger.setLevel(logging.WARNING)
         
         # Thread-local storage for user context
         self._context = local()

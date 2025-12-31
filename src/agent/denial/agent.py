@@ -1,7 +1,7 @@
 """Workflow for evaluating PA denial decisions."""
 
 import json
-from typing import Literal, Optional, Dict, Any
+from typing import Literal, Optional, Dict, Any, List
 from langchain_core.messages import SystemMessage, HumanMessage
 from langchain_openai import ChatOpenAI
 from langgraph.graph import StateGraph, END
@@ -50,6 +50,12 @@ from ...tools import (
 from ...models.core import ServiceInfo, ClinicalContext
 
 
+# Console output helper
+def log_denial(message: str) -> None:
+    """Print formatted status message for denial evaluation."""
+    print(f"   ├─ Denial Agent: {message}")
+
+
 def create_gap_analysis_agent(model_id) -> CompiledStateGraph:
     model = ChatOpenAI(model=model_id, timeout=20, max_retries=3)
     agent = create_agent(
@@ -88,6 +94,7 @@ def create_denial_evaluation_workflow(model_id: str = "gpt-4o-mini"):
 
     async def categorizer_node(state: DenialEvaluatorState) -> dict:
         """Categorize the denial decision."""
+        log_denial("Categorizing denial reason...")
 
         user_message = build_categorizer_user_prompt(state)
         messages = [
@@ -111,6 +118,7 @@ def create_denial_evaluation_workflow(model_id: str = "gpt-4o-mini"):
         }
 
     async def gap_analyst_node(state: DenialEvaluatorState, runtime: Runtime) -> dict:
+        log_denial("Analyzing gaps and creating evidence search plan...")
 
         user_message = build_gap_analysis_user_prompt(state)
         result = await gap_analyst.ainvoke(
@@ -126,6 +134,7 @@ def create_denial_evaluation_workflow(model_id: str = "gpt-4o-mini"):
         }
 
     async def evidence_gather_node(state: DenialEvaluatorState, runtime: Runtime) -> dict:
+        log_denial("Gathering supporting evidence from EHR and documents...")
 
         user_message = build_evidence_gatherer_user_prompt(state)
         result = await evidence_gatherer.ainvoke(
@@ -134,13 +143,16 @@ def create_denial_evaluation_workflow(model_id: str = "gpt-4o-mini"):
         )
         response: EvidenceGathering = result["structured_response"]
 
+        log_denial(f"Found {len(response.found_evidences)} evidence items")
+
         return {
             "found_evidence": response.found_evidences,
             "missing_evidence": response.missing_evidence,
         }
 
     async def reasoning_node(state: DenialEvaluatorState) -> dict:
-        print("inside reasoning_node")
+        log_denial("Evaluating evidence and determining recommendation...")
+        
         user_message = build_reasoning_user_prompt(state)
         messages = [
             SystemMessage(content=REASONING_SYSTEM_PROMPT),
@@ -150,7 +162,7 @@ def create_denial_evaluation_workflow(model_id: str = "gpt-4o-mini"):
         response: Judgement = await llm_with_structure_output.ainvoke(messages)
         
         revision_count = state.get("revision_count", 0)
-        print(response.confidence_score)
+        
         if response.confidence_score < 0.7 and response.require_more_evidence and revision_count < 1:
             return {
                 "required_evidence": response.require_more_evidence,
