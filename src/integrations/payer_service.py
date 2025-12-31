@@ -16,7 +16,7 @@ from ..models import (
 )
 
 # Load mock data
-_DATA_DIR = Path(__file__).parent / "mock_data"
+_DATA_DIR = Path(__file__).parent.parent.parent / "data"
 
 
 def _load_json(filename: str) -> dict:
@@ -80,6 +80,7 @@ def is_pa_required(
     payer_id: str,
     plan_id: str,
     cpt_codes: List[str],
+    hcpcs_codes: List[str],
     dx_codes: List[str],
     site_of_service: str
 ) -> PARequirement:
@@ -90,6 +91,7 @@ def is_pa_required(
         payer_id: The payer identifier
         plan_id: The plan identifier  
         cpt_codes: List of CPT procedure codes
+        hcpcs_codes: List of HCPCS codes (including J-codes for drugs)
         dx_codes: List of ICD-10 diagnosis codes
         site_of_service: Where the service will be performed
         
@@ -100,15 +102,20 @@ def is_pa_required(
     rules = pa_data.get("rules", [])
     default = pa_data.get("default_response", {})
     
+    all_procedure_codes = set(cpt_codes + hcpcs_codes)
+    
     # Find matching rule
     for rule in rules:
         # Check payer match
         if payer_id not in rule.get("payer_ids", []):
             continue
-            
-        # Check CPT code match
+        
+        # Check procedure code match (CPT or HCPCS)
         rule_cpt = set(rule.get("cpt_codes", []))
-        if not rule_cpt.intersection(cpt_codes):
+        rule_hcpcs = set(rule.get("hcpcs_codes", []))
+        rule_all_codes = rule_cpt.union(rule_hcpcs)
+        
+        if not rule_all_codes.intersection(all_procedure_codes):
             continue
             
         # Check site of service match (if specified in rule)
@@ -241,9 +248,9 @@ def check_pa_status(submission_id: str) -> Optional[PAStatusResponse]:
     return PAStatusResponse(
         status=current_status,
         status_date=datetime.fromisoformat(submission["last_updated"]),
-        decision_details=submission.get("decision_details", []),
-        authorization_number=submission.get("authorization_number", []),
-        denial_reason=submission.get("denial_reason", []),
+        decision_details=submission.get("decision_details", {}),
+        authorization_number=submission.get("authorization_number", None),
+        denial_reason=submission.get("denial_reason", None),
         rfi_details=submission.get("rfi_details", [])
     )
 
@@ -288,15 +295,7 @@ def upload_documents(
     uploaded_docs = []
     failed_docs = []
     
-    for doc in documents:
-        # Validate document
-        if not doc.file_path:
-            failed_docs.append({
-                "document_id": doc.document_id,
-                "error": "File path is required"
-            })
-            continue
-        
+    for doc in documents:        
         # Add document to submission
         doc_record = {
             "document_id": doc.document_id,
