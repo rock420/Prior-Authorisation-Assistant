@@ -82,7 +82,7 @@ def create_denial_evaluation_workflow(model_id: str = "gpt-4o-mini"):
     """Create the denial evaluator workflow"""
     
     # Initialize LLMs
-    llm = ChatOpenAI(model=model_id, timeout=20, max_retries=3)
+    llm = ChatOpenAI(model="gpt-4o", timeout=20, max_retries=3)
     gap_analyst = create_gap_analysis_agent(model_id)
     evidence_gatherer = create_evidence_gatherer_agent(model_id)
 
