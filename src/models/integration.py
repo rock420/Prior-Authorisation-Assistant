@@ -43,6 +43,8 @@ class PatientSummary(BaseModel):
     medications: List[Dict[str, Any]] = Field(default_factory=list, description="Current medications")
     recent_visits: List[Dict[str, Any]] = Field(default_factory=list, description="Recent medical visits")
     allergies: List[str] = Field(default_factory=list, description="Known allergies")
+    failed_therapies: List[Dict[str, Any]] = Field(default_factory=list, description="Previously failed therapies")
+    conservative_therapy_history: List[Dict[str, Any]] = Field(default_factory=list, description="Conservative treatment history")
     last_updated: datetime = Field(..., description="When the summary was last updated")
 
 

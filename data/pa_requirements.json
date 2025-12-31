@@ -209,11 +209,8 @@
                 "Clinical notes documenting diagnosis and disease activity",
                 "Documentation of failed first-line DMARD therapy with dates and doses",
                 "Relevant lab results (RF, Anti-CCP, CRP, ESR for RA)",
-                "Disease activity score (DAS28 for RA)",
-                "TB screening results (QuantiFERON or PPD)",
                 "Hepatitis B and C screening",
-                "Treatment plan and expected duration",
-                "Provider attestation form"
+                "Treatment plan and expected duration"
             ],
             "medical_necessity_criteria": [
                 "Confirmed diagnosis of approved indication (RA, PsA, AS, Crohn's, UC, Psoriasis)",

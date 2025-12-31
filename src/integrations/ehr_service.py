@@ -97,5 +97,7 @@ def get_patient_summary(request: PatientDataRequest) -> Optional[PatientSummary]
         recent_visits=filtered["recent_visits"],
         coverage=filtered["coverage"],
         allergies=[],
+        failed_therapies=filtered.get("failed_therapies", []),
+        conservative_therapy_history=filtered.get("conservative_therapy_history", []),
         last_updated=datetime.utcnow()
     )

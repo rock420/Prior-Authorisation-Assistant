@@ -13,18 +13,18 @@ from ..models.integration import PatientDataRequest, AccessPurpose, PHICategory
 class PatientHealthRecordInput(BaseModel):
     """Input schema for patient health record retrieval."""
     categories: List[PHICategory] = Field(
-        description="Categories of data to retrieve (identifiers, clinical, treatment, encounters, coverage)"
+        description="Categories of data to retrieve (identifiers, clinical, treatment, encounters, coverage). Each category data is separated, combination doesn't matter"
     )
     purpose: AccessPurpose = Field(
-        description="Purpose of data access (pa_submission, eligibility_check, clinical_review, document_collection)"
+        description="Purpose of data access (pa_submission, eligibility_check, clinical_review, document_collection). For auditing purpose"
     )
     justification: str = Field(
-        description="Justification for data access - explain why this data is needed"
+        description="Justification for data access - explain why this data is needed. For auditing purpose"
     )
 
 
 @tool(
-    description="Get patient health details based on requested categories. "
+    description="Get patient health details based on requested categories. purpose/justification are for auditing purpose and doesn't change tool response"
                 "Use this to retrieve demographics, clinical problems, medications, visit history, and coverage info.",
     args_schema=PatientHealthRecordInput
 )

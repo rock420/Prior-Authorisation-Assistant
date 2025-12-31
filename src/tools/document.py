@@ -7,9 +7,9 @@ from ..models.document import DocumentType, DocumentMetadata
 
 
 class DocumentSearchInput(BaseModel):
-    document_type: Optional[DocumentType] = Field(
-        None, 
-        description="The type of document to search for (clinical_note, lab_result, imaging_report, letter_of_medical_necessity, etc.). If not specified, searches all document types."
+    document_type: DocumentType = Field(
+        ..., 
+        description="The type of document to search for (clinical_note, lab_result, imaging_report, letter_of_medical_necessity, etc.)"
     )
     keywords: Optional[List[str]] = Field(
         None, 
@@ -24,7 +24,7 @@ class DocumentSearchInput(BaseModel):
 )
 async def search_patient_documents(
     runtime: ToolRuntime, 
-    document_type: Optional[DocumentType] = None, 
+    document_type: DocumentType, 
     keywords: Optional[List[str]] = None
 ) -> List[dict]:
     patient_id = runtime.context.get("patient_id")

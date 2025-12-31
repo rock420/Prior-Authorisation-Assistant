@@ -6,8 +6,7 @@ from ..models.core import ClinicalContext, PAWorkFlowStatus, PayerInfo, ServiceI
 from ..models.integration import AccessPurpose, PARequirement, PAStatusResponse, PAStatus, PatientDataRequest, PHICategory, UploadDocument
 from ..models.hitl import HITLTask, TaskType, TaskPriority, TaskStatus
 from ..models.document import DocumentType, DocumentMappingList, DocumentMetadata
-from ..models.validators import ValidatorRegistry, ValidationResult
-from .state import PAIntake, PAAgentState, NormalizedDocument
+from .state import PAIntake, PAAgentState
 from ..integrations.document_service import document_search_tool
 from ..integrations.ehr_service import get_patient_summary
 from ..integrations.provider import get_provider_details, create_task_for_staff
@@ -429,6 +428,7 @@ async def validate_requirements(state: PAAgentState):
             Gaps Identified: {', '.join(current_item.gaps)}
             """)
             item_context[current_item.item_id] = {
+                "Required information": current_item.original_request,
                 "state": current_item.status,
             }
 
